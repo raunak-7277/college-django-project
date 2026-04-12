@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Meeting Room{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        
+        <!-- Main video -->
+        <div class="col-lg-9">
+            <div class="border rounded p-5 text-center">
+                <h2>Main Video Area</h2>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="border rounded p-4">
+                <h4>Participants</h4>
+                <ul>
+                    <li>User 1</li>
+                    <li>User 2</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="text-center mt-4">
+        <button class="btn btn-primary">Mic</button>
+        <button class="btn btn-secondary">Camera</button>
+        <button class="btn btn-danger">End Call</button>
+    </div>
+</div>
+{% endblock %}
