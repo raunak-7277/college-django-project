@@ -25,6 +25,9 @@
         </div>
     </div>
 
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+
     <!-- Controls -->
     <div class="text-center mt-4">
         <button class="btn btn-primary">Mic</button>
@@ -33,3 +36,5 @@
     </div>
 </div>
 {% endblock %}
+
+<script src="{% static 'js/room.js' %}"></script>
