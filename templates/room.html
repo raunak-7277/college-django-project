@@ -1,19 +1,54 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Meeting Room{% endblock %}
 
 {% block content %}
 <div class="container-fluid py-4">
     <div class="row">
-        
-        <!-- Main video -->
         <div class="col-lg-9">
-            <div class="border rounded p-5 text-center">
-                <h2>Main Video Area</h2>
+            <div class="border rounded p-3 p-lg-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2 class="h4 mb-1">Meeting Room</h2>
+                        <p class="text-secondary mb-0">Room ID: {{ room_id }}</p>
+                    </div>
+                    <span class="badge text-bg-dark border">Preview</span>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="border rounded p-2">
+                            <p class="small text-secondary mb-2">Local camera</p>
+                            <video
+                                id="localVideo"
+                                class="w-100 rounded bg-black"
+                                autoplay
+                                muted
+                                playsinline
+                            ></video>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="border rounded p-2">
+                            <p class="small text-secondary mb-2">Remote participant</p>
+                            <video
+                                id="remoteVideo"
+                                class="w-100 rounded bg-black"
+                                autoplay
+                                playsinline
+                            ></video>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="mediaStatus" class="small text-secondary mt-3 mb-0">
+                    Waiting for camera permission...
+                </p>
             </div>
         </div>
 
-        <!-- Sidebar -->
         <div class="col-lg-3">
             <div class="border rounded p-4">
                 <h4>Participants</h4>
@@ -21,20 +56,18 @@
                     <li>User 1</li>
                     <li>User 2</li>
                 </ul>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="button" class="btn btn-primary">Mic</button>
+                    <button type="button" class="btn btn-secondary">Camera</button>
+                    <button type="button" class="btn btn-danger">End Call</button>
+                </div>
             </div>
         </div>
-    </div>
-
-    <video id="localVideo" autoplay muted></video>
-    <video id="remoteVideo" autoplay></video>
-
-    <!-- Controls -->
-    <div class="text-center mt-4">
-        <button class="btn btn-primary">Mic</button>
-        <button class="btn btn-secondary">Camera</button>
-        <button class="btn btn-danger">End Call</button>
     </div>
 </div>
 {% endblock %}
 
+{% block extra_js %}
 <script src="{% static 'js/room.js' %}"></script>
+{% endblock %}
