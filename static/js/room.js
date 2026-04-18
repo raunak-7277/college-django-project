@@ -7,33 +7,34 @@ class RoomMediaController {
     }
 
     async initialize() {
-        if (!this.localVideo) {
-            return;
-        }
+        if (!this.localVideo) return;
 
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
             this.setStatus('Camera preview is not supported in this browser.');
             return;
         }
 
-        this.setStatus('Requesting access to your camera...');
+        this.setStatus('Requesting camera & microphone access...');
 
         try {
             this.localStream = await navigator.mediaDevices.getUserMedia({
                 video: true,
-                audio: false,
+                audio: true   // ✅ FIXED
             });
 
             this.attachLocalStream(this.localStream);
-            this.setStatus('Local camera preview is live.');
+            this.setStatus('Local preview is live.');
+
         } catch (error) {
-            console.error('Unable to start local camera preview.', error);
-            this.setStatus('Camera access was denied or is unavailable.');
+            console.error('Media access error:', error);
+            this.setStatus('Camera/Mic access denied.');
         }
     }
 
     attachLocalStream(stream) {
-        this.localVideo.srcObject = stream;
+        if (this.localVideo) {
+            this.localVideo.srcObject = stream;
+        }
     }
 
     setRemoteStream(stream) {
@@ -43,14 +44,16 @@ class RoomMediaController {
     }
 
     stopLocalStream() {
-        if (!this.localStream) {
-            return;
+        if (!this.localStream) return;
+
+        this.localStream.getTracks().forEach(track => track.stop());
+        this.localStream = null;
+
+        if (this.localVideo) {
+            this.localVideo.srcObject = null;
         }
 
-        this.localStream.getTracks().forEach((track) => track.stop());
-        this.localStream = null;
-        this.localVideo.srcObject = null;
-        this.setStatus('Local camera preview stopped.');
+        this.setStatus('Local stream stopped.');
     }
 
     setStatus(message) {
@@ -63,16 +66,19 @@ class RoomMediaController {
 document.addEventListener('DOMContentLoaded', () => {
     const localVideo = document.getElementById('localVideo');
 
-    if (!localVideo) {
-        return;
-    }
+    if (!localVideo) return;
 
-    const roomMediaController = new RoomMediaController({
+    const controller = new RoomMediaController({
         localVideo,
         remoteVideo: document.getElementById('remoteVideo'),
         statusElement: document.getElementById('mediaStatus'),
     });
 
-    roomMediaController.initialize();
-    window.roomMediaController = roomMediaController;
+    controller.initialize();
+    
+    window.addEventListener('beforeunload', () => {
+        controller.stopLocalStream();
+    });
+
+    window.roomMediaController = controller;
 });

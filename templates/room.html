@@ -6,8 +6,12 @@
 {% block content %}
 <div class="container-fluid py-4">
     <div class="row">
+
+        <!-- Main Video Area -->
         <div class="col-lg-9">
             <div class="border rounded p-3 p-lg-4">
+                
+                <!-- Header -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
                         <h2 class="h4 mb-1">Meeting Room</h2>
@@ -16,10 +20,13 @@
                     <span class="badge text-bg-dark border">Preview</span>
                 </div>
 
+                <!-- Video Section -->
                 <div class="row g-3">
+
+                    <!-- Local Video -->
                     <div class="col-md-6">
                         <div class="border rounded p-2">
-                            <p class="small text-secondary mb-2">Local camera</p>
+                            <p class="small text-secondary mb-2">Local Camera</p>
                             <video
                                 id="localVideo"
                                 class="w-100 rounded bg-black"
@@ -30,9 +37,10 @@
                         </div>
                     </div>
 
+                    <!-- Remote Video -->
                     <div class="col-md-6">
                         <div class="border rounded p-2">
-                            <p class="small text-secondary mb-2">Remote participant</p>
+                            <p class="small text-secondary mb-2">Remote Participant</p>
                             <video
                                 id="remoteVideo"
                                 class="w-100 rounded bg-black"
@@ -41,29 +49,37 @@
                             ></video>
                         </div>
                     </div>
+
                 </div>
 
+                <!-- Status -->
                 <p id="mediaStatus" class="small text-secondary mt-3 mb-0">
                     Waiting for camera permission...
                 </p>
+
             </div>
         </div>
 
+        <!-- Sidebar -->
         <div class="col-lg-3">
             <div class="border rounded p-4">
+                
                 <h4>Participants</h4>
-                <ul>
-                    <li>User 1</li>
-                    <li>User 2</li>
+                <ul class="list-unstyled">
+                    <li>You</li>
+                    <li>Waiting for others...</li>
                 </ul>
 
+                <!-- Controls -->
                 <div class="d-grid gap-2 mt-4">
                     <button type="button" class="btn btn-primary">Mic</button>
                     <button type="button" class="btn btn-secondary">Camera</button>
                     <button type="button" class="btn btn-danger">End Call</button>
                 </div>
+
             </div>
         </div>
+
     </div>
 </div>
 {% endblock %}
