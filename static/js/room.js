@@ -3,6 +3,10 @@ class RoomMediaController {
         this.localVideo = options.localVideo;
         this.remoteVideo = options.remoteVideo;
         this.statusElement = options.statusElement;
+        this.micButton = options.micButton;
+        this.cameraButton = options.cameraButton;
+        this.micStateElement = options.micStateElement;
+        this.cameraStateElement = options.cameraStateElement;
 
         this.localStream = null;
         this.peerConnection = null;
@@ -27,13 +31,117 @@ class RoomMediaController {
             this.createPeerConnection();
             this.addLocalTracks();
             this.connectWebSocket();
-
+            this.updateControlStates();
             this.setStatus("Ready");
 
         } catch (err) {
             console.error("Media error:", err);
+            this.updateControlStates(false);
             this.setStatus("Camera/Mic access failed");
         }
+    }
+
+    updateControlStates(isReady = true) {
+        if (this.micButton) {
+            this.micButton.disabled = !isReady;
+        }
+
+        if (this.cameraButton) {
+            this.cameraButton.disabled = !isReady;
+        }
+
+        if (!this.localStream) return;
+
+        const audioTrack = this.localStream.getAudioTracks()[0];
+        const videoTrack = this.localStream.getVideoTracks()[0];
+
+        if (this.micButton && audioTrack) {
+            this.micButton.textContent = audioTrack.enabled ? "Mic ON" : "Mic OFF";
+            this.micButton.classList.toggle("btn-primary", audioTrack.enabled);
+            this.micButton.classList.toggle("btn-danger", !audioTrack.enabled);
+        }
+
+        if (this.micStateElement && audioTrack) {
+            this.micStateElement.textContent = audioTrack.enabled ? "ON" : "OFF";
+            this.micStateElement.classList.toggle("text-bg-success", audioTrack.enabled);
+            this.micStateElement.classList.toggle("text-bg-danger", !audioTrack.enabled);
+        }
+
+        if (this.cameraButton && videoTrack) {
+            this.cameraButton.textContent = videoTrack.enabled ? "Camera ON" : "Camera OFF";
+            this.cameraButton.classList.toggle("btn-secondary", videoTrack.enabled);
+            this.cameraButton.classList.toggle("btn-danger", !videoTrack.enabled);
+        }
+
+        if (this.cameraStateElement && videoTrack) {
+            this.cameraStateElement.textContent = videoTrack.enabled ? "ON" : "OFF";
+            this.cameraStateElement.classList.toggle("text-bg-success", videoTrack.enabled);
+            this.cameraStateElement.classList.toggle("text-bg-danger", !videoTrack.enabled);
+        }
+    }
+
+    toggleMic() {
+        if (!this.localStream) {
+            this.setStatus("Camera/Mic is not ready yet");
+            return;
+        }
+
+        const audioTrack = this.localStream.getAudioTracks()[0];
+
+        if (!audioTrack) {
+            this.setStatus("No microphone track found");
+            return;
+        }
+
+        audioTrack.enabled = !audioTrack.enabled;
+        this.updateControlStates();
+    }
+
+    toggleCamera() {
+        if (!this.localStream) {
+            this.setStatus("Camera/Mic is not ready yet");
+            return;
+        }
+
+        const videoTrack = this.localStream.getVideoTracks()[0];
+
+        if (!videoTrack) {
+            this.setStatus("No camera track found");
+            return;
+        }
+
+        videoTrack.enabled = !videoTrack.enabled;
+        this.updateControlStates();
+    }
+
+    endCall() {
+        console.log("Ending call...");
+
+        // stop media
+        if (this.localStream) {
+            this.localStream.getTracks().forEach(track =>   track.stop());
+        }
+
+    // close peer connection
+        if (this.peerConnection) {
+            this.peerConnection.close();
+        }
+
+        // close websocket
+        if (this.socket) {
+            this.socket.close();
+        }
+
+    // clear videos
+        if (this.localVideo) this.localVideo.srcObject = null;
+        if (this.remoteVideo) this.remoteVideo.srcObject = null;
+
+        this.setStatus("Call ended");
+
+    // redirect to home after short delay
+        setTimeout(() => {
+            window.location.href = "/";
+        }, 1000);
     }
 
     createPeerConnection() {
@@ -193,10 +301,38 @@ document.addEventListener("DOMContentLoaded", () => {
     controller = new RoomMediaController({
         localVideo: document.getElementById("localVideo"),
         remoteVideo: document.getElementById("remoteVideo"),
-        statusElement: document.getElementById("mediaStatus")
+        statusElement: document.getElementById("mediaStatus"),
+        micButton: document.getElementById("micBtn"),
+        cameraButton: document.getElementById("cameraBtn"),
+        micStateElement: document.getElementById("micState"),
+        cameraStateElement: document.getElementById("cameraState")
     });
 
     controller.initialize();
+
+    const micBtn = document.getElementById("micBtn");
+    if (micBtn) {
+        micBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            controller.toggleMic();
+        });
+    }
+
+    const camBtn = document.getElementById("cameraBtn");
+    if (camBtn) {
+        camBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            controller.toggleCamera();
+        });
+    }
+
+    const endBtn = document.getElementById("endCallBtn");
+
+    if (endBtn) {
+       endBtn.addEventListener("click", () => {
+          controller.endCall();
+        });
+    }
 });
 
 // 🔥 CLEANUP (important)

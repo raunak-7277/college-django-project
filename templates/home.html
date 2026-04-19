@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Live Video Call{% endblock %}
 
 {% block extra_css %}
@@ -45,24 +45,25 @@
 
 {% block content %}
 
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark py-3 border-bottom border-secondary">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="#">📹 Apna Video Call</a>
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">  Video Call</a>
 
         <div class="ms-auto d-flex gap-4 align-items-center">
-            <a href="#" class="text-white text-decoration-none">Join as Guest</a>
-            <a href="#" class="text-white text-decoration-none">Register</a>
-            <a href="#" class="btn cta-btn">Login</a>
+            <a href="{% url 'create_room' %}" class="text-white text-decoration-none">Join as Guest</a>
+            <a href="{% url 'register' %}" class="text-white text-decoration-none">Register</a>
+            <a href="{% url 'login' %}" class="btn cta-btn">Login</a>
         </div>
     </div>
 </nav>
 
-
+<!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center">
             
-       
+            <!-- Left Content -->
             <div class="col-lg-6">
                 <span class="badge rounded-pill bg-dark border border-secondary px-3 py-2 mb-4">
                     🟢 LIVE HD VIDEO
@@ -80,8 +81,30 @@
                     most important conversations.
                 </p>
 
-                <div class="mt-4 d-flex gap-3">
-                    <div class="mt-5 d-flex align-items-center gap-3">
+                <!-- Buttons -->
+                <div class="mt-4 d-flex gap-3 flex-wrap">
+                    <a href="{% url 'create_room' %}" id="createRoomBtn" class="btn cta-btn">
+                        Get Started Free →
+                    </a>
+
+                    <a href="{% url 'login' %}" id="loginBtn" class="btn btn-outline-light demo-btn">
+                        Login
+                    </a>
+                </div>
+
+                <!-- Join Room -->
+                <div class="mt-4">
+                    <input type="text" id="roomInput"
+                        class="form-control w-75"
+                        placeholder="Enter Room ID">
+
+                    <button class="btn btn-success mt-3" onclick="joinRoom()">
+                        Join Room
+                    </button>
+                </div>
+
+                <!-- Users -->
+                <div class="mt-5 d-flex align-items-center gap-3">
                     <div class="d-flex">
                         <div class="rounded-circle bg-light text-dark d-flex justify-content-center align-items-center"
                             style="width:45px;height:45px;">👨</div>
@@ -90,22 +113,36 @@
                         <div class="rounded-circle bg-secondary text-white d-flex justify-content-center align-items-center ms-n2"
                             style="width:45px;height:45px;">+2k</div>
                     </div>
-                <span class="text-secondary">Trusted by happy users</span>
-</div>
-                    <a href="/create-room/" id="createRoomBtn" class="btn cta-btn">Get Started Free →</a>
-                    <a href="/login/" id="loginBtn" class="btn btn-outline-light demo-btn">Login</a>
+                    <span class="text-secondary">Trusted by happy users</span>
                 </div>
             </div>
 
-   
-            <div class="col-lg-6">
-                <div class="mock-video shadow-lg d-flex justify-content-center align-items-center">
-                    <h3 class="text-dark">Video Preview Area</h3>
+            <!-- Right Content -->
+            <div class="col-lg-6 d-flex justify-content-end">
+                <div class="mock-video shadow-lg overflow-hidden d-flex justify-content-center align-items-start">
+
+                    <img src="{% static 'images/call.png' %}" 
+                    class="img-fluid w-100 h-60"
+                    style="object-fit: cover; object-position: top;"
+                a   lt="Video Preview">
+
                 </div>
             </div>
-
         </div>
     </div>
 </section>
+
+<!-- Join Script -->
+<script>
+function joinRoom() {
+    const roomId = document.getElementById("roomInput").value;
+
+    if (roomId) {
+        window.location.href = `/room/${roomId}/`;
+    } else {
+        alert("Please enter Room ID");
+    }
+}
+</script>
 
 {% endblock %}

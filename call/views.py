@@ -1,4 +1,5 @@
-from django.shortcuts import render
+import uuid
+from django.shortcuts import render, redirect
 
 
 def home(request):
@@ -6,12 +7,11 @@ def home(request):
 
 
 def create_room(request):
-    return render(request, 'create_room.html')
+    room_id = str(uuid.uuid4())[:8]  
+    return redirect('room_detail', room_id=room_id)
 
-
-def room(request, room_id='demo-room'):
-    context = {'room_id': room_id}
-    return render(request, 'room.html', context)
+def room(request, room_id):
+    return render(request, 'room.html', {'room_id': room_id})
 
 
 def login_view(request):
