@@ -15,6 +15,8 @@ class RoomMediaController {
 
     async initialize() {
         try {
+            this.setStatus("Requesting camera...");
+
             this.localStream = await navigator.mediaDevices.getUserMedia({
                 video: true,
                 audio: true
@@ -26,8 +28,11 @@ class RoomMediaController {
             this.addLocalTracks();
             this.connectWebSocket();
 
+            this.setStatus("Ready");
+
         } catch (err) {
             console.error("Media error:", err);
+            this.setStatus("Camera/Mic access failed");
         }
     }
 
@@ -44,9 +49,10 @@ class RoomMediaController {
         this.peerConnection.ontrack = (event) => {
             console.log("Remote stream received");
             this.remoteVideo.srcObject = event.streams[0];
+            this.setStatus("Connected");
         };
 
-        // ICE
+        // ICE candidates
         this.peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 this.sendSignal({
@@ -56,9 +62,13 @@ class RoomMediaController {
             }
         };
 
-        // Debug
+        // Debug logs
         this.peerConnection.onconnectionstatechange = () => {
             console.log("Connection:", this.peerConnection.connectionState);
+        };
+
+        this.peerConnection.oniceconnectionstatechange = () => {
+            console.log("ICE:", this.peerConnection.iceConnectionState);
         };
     }
 
@@ -77,6 +87,7 @@ class RoomMediaController {
 
         this.socket.onopen = () => {
             console.log("WebSocket connected");
+            this.setStatus("Connected to room");
 
             this.sendSignal({ type: "join" });
         };
@@ -87,19 +98,29 @@ class RoomMediaController {
 
             await this.handleSignal(data);
         };
+
+        this.socket.onerror = (e) => {
+            console.error("WebSocket error:", e);
+            this.setStatus("WebSocket error");
+        };
+
+        this.socket.onclose = () => {
+            console.log("WebSocket closed");
+            this.setStatus("Disconnected");
+        };
     }
 
     sendSignal(data) {
-        if (this.socket.readyState === WebSocket.OPEN) {
+        if (this.socket && this.socket.readyState === WebSocket.OPEN) {
             this.socket.send(JSON.stringify(data));
         }
     }
 
     async handleSignal(data) {
 
-        // JOIN → create offer (only once)
+        // JOIN → only one creates offer
         if (data.type === "join") {
-            if (!this.hasCreatedOffer) {
+            if (!this.hasCreatedOffer && this.peerConnection.signalingState === "stable") {
                 this.hasCreatedOffer = true;
 
                 console.log("Creating offer...");
@@ -157,14 +178,40 @@ class RoomMediaController {
 
         console.log("Answer sent");
     }
+
+    setStatus(message) {
+        if (this.statusElement) {
+            this.statusElement.textContent = message;
+        }
+    }
 }
 
+// 🔥 GLOBAL CONTROLLER (fix for unload bug)
+let controller;
+
 document.addEventListener("DOMContentLoaded", () => {
-    const controller = new RoomMediaController({
+    controller = new RoomMediaController({
         localVideo: document.getElementById("localVideo"),
         remoteVideo: document.getElementById("remoteVideo"),
         statusElement: document.getElementById("mediaStatus")
     });
 
     controller.initialize();
+});
+
+// 🔥 CLEANUP (important)
+window.addEventListener("beforeunload", () => {
+    if (!controller) return;
+
+    if (controller.localStream) {
+        controller.localStream.getTracks().forEach(track => track.stop());
+    }
+
+    if (controller.peerConnection) {
+        controller.peerConnection.close();
+    }
+
+    if (controller.socket) {
+        controller.socket.close();
+    }
 });
