@@ -33,7 +33,6 @@ class CallConsumer(AsyncWebsocketConsumer):
         )
 
     async def send_signal(self, event):
-        # ❌ Don't send back to same client
         if self.channel_name == event['sender']:
             return
 
