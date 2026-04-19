@@ -8,22 +8,18 @@ https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
 """
 
 import os
-
-from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
-
-from call.routing import websocket_urlpatterns
+from channels.auth import AuthMiddlewareStack
+import call.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'videocall.settings')
 
-django_asgi_app = get_asgi_application()
-
-application = ProtocolTypeRouter(
-    {
-        'http': django_asgi_app,
-        'websocket': AuthMiddlewareStack(
-            URLRouter(websocket_urlpatterns)
-        ),
-    }
-)
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    "websocket": AuthMiddlewareStack(
+        URLRouter(
+            call.routing.websocket_urlpatterns
+        )
+    ),
+})

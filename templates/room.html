@@ -17,7 +17,7 @@
                         <h2 class="h4 mb-1">Meeting Room</h2>
                         <p class="text-secondary mb-0">Room ID: {{ room_id }}</p>
                     </div>
-                    <span class="badge text-bg-dark border">Preview</span>
+                    <span class="badge text-bg-dark border">Live</span>
                 </div>
 
                 <!-- Video Section -->
@@ -26,7 +26,7 @@
                     <!-- Local Video -->
                     <div class="col-md-6">
                         <div class="border rounded p-2">
-                            <p class="small text-secondary mb-2">Local Camera</p>
+                            <p class="small text-secondary mb-2">You</p>
                             <video
                                 id="localVideo"
                                 class="w-100 rounded bg-black"
@@ -40,12 +40,13 @@
                     <!-- Remote Video -->
                     <div class="col-md-6">
                         <div class="border rounded p-2">
-                            <p class="small text-secondary mb-2">Remote Participant</p>
+                            <p class="small text-secondary mb-2">Remote</p>
                             <video
                                 id="remoteVideo"
                                 class="w-100 rounded bg-black"
                                 autoplay
                                 playsinline
+                                muted
                             ></video>
                         </div>
                     </div>
@@ -54,7 +55,7 @@
 
                 <!-- Status -->
                 <p id="mediaStatus" class="small text-secondary mt-3 mb-0">
-                    Waiting for camera permission...
+                    Connecting...
                 </p>
 
             </div>
@@ -70,7 +71,7 @@
                     <li>Waiting for others...</li>
                 </ul>
 
-                <!-- Controls -->
+                <!-- Controls (UI only for now) -->
                 <div class="d-grid gap-2 mt-4">
                     <button type="button" class="btn btn-primary">Mic</button>
                     <button type="button" class="btn btn-secondary">Camera</button>
@@ -85,10 +86,15 @@
 {% endblock %}
 
 {% block extra_js %}
+
+<!-- ✅ Pass room ID safely -->
 <script>
     window.roomConfig = {
         roomId: "{{ room_id|escapejs }}"
     };
 </script>
+
+<!-- ✅ Load WebRTC logic -->
 <script src="{% static 'js/room.js' %}"></script>
+
 {% endblock %}
