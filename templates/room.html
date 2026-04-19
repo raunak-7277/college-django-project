@@ -85,5 +85,10 @@
 {% endblock %}
 
 {% block extra_js %}
+<script>
+    window.roomConfig = {
+        roomId: "{{ room_id|escapejs }}"
+    };
+</script>
 <script src="{% static 'js/room.js' %}"></script>
 {% endblock %}
