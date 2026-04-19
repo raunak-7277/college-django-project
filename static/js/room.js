@@ -11,9 +11,9 @@ class RoomMediaController {
         this.localStream = null;
         this.peerConnection = null;
         this.socket = null;
+        this.isEndingCall = false;
 
         this.roomId = window.roomConfig?.roomId || window.location.pathname.split("/")[2];
-
         this.hasCreatedOffer = false;
     }
 
@@ -28,12 +28,10 @@ class RoomMediaController {
 
             this.localVideo.srcObject = this.localStream;
 
-            this.createPeerConnection();
-            this.addLocalTracks();
+            this.preparePeerConnection();
             this.connectWebSocket();
             this.updateControlStates();
             this.setStatus("Ready");
-
         } catch (err) {
             console.error("Media error:", err);
             this.updateControlStates(false);
@@ -50,7 +48,9 @@ class RoomMediaController {
             this.cameraButton.disabled = !isReady;
         }
 
-        if (!this.localStream) return;
+        if (!this.localStream) {
+            return;
+        }
 
         const audioTrack = this.localStream.getAudioTracks()[0];
         const videoTrack = this.localStream.getVideoTracks()[0];
@@ -114,34 +114,71 @@ class RoomMediaController {
         this.updateControlStates();
     }
 
+    preparePeerConnection() {
+        this.cleanupPeerConnection();
+        this.createPeerConnection();
+        this.addLocalTracks();
+    }
+
+    cleanupPeerConnection() {
+        if (this.peerConnection) {
+            this.peerConnection.ontrack = null;
+            this.peerConnection.onicecandidate = null;
+            this.peerConnection.onconnectionstatechange = null;
+            this.peerConnection.oniceconnectionstatechange = null;
+            this.peerConnection.close();
+            this.peerConnection = null;
+        }
+
+        this.hasCreatedOffer = false;
+
+        if (this.remoteVideo) {
+            this.remoteVideo.srcObject = null;
+        }
+    }
+
+    resetConnectionForRejoin(message = "Waiting for someone to join...") {
+        if (!this.localStream) {
+            this.hasCreatedOffer = false;
+            if (this.remoteVideo) {
+                this.remoteVideo.srcObject = null;
+            }
+            this.setStatus(message);
+            return;
+        }
+
+        this.preparePeerConnection();
+        this.setStatus(message);
+    }
+
     endCall() {
         console.log("Ending call...");
+        this.isEndingCall = true;
 
-        // stop media
+        this.sendSignal({ type: "leave" });
+        this.cleanupPeerConnection();
+
         if (this.localStream) {
-            this.localStream.getTracks().forEach(track =>   track.stop());
+            this.localStream.getTracks().forEach(track => track.stop());
+            this.localStream = null;
         }
 
-    // close peer connection
-        if (this.peerConnection) {
-            this.peerConnection.close();
+        if (this.localVideo) {
+            this.localVideo.srcObject = null;
         }
 
-        // close websocket
+        this.updateControlStates(false);
+
         if (this.socket) {
             this.socket.close();
+            this.socket = null;
         }
-
-    // clear videos
-        if (this.localVideo) this.localVideo.srcObject = null;
-        if (this.remoteVideo) this.remoteVideo.srcObject = null;
 
         this.setStatus("Call ended");
 
-    // redirect to home after short delay
         setTimeout(() => {
             window.location.href = "/";
-        }, 1000);
+        }, 500);
     }
 
     createPeerConnection() {
@@ -153,14 +190,12 @@ class RoomMediaController {
 
         console.log("PeerConnection created");
 
-        // Remote stream
         this.peerConnection.ontrack = (event) => {
             console.log("Remote stream received");
             this.remoteVideo.srcObject = event.streams[0];
             this.setStatus("Connected");
         };
 
-        // ICE candidates
         this.peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 this.sendSignal({
@@ -170,9 +205,13 @@ class RoomMediaController {
             }
         };
 
-        // Debug logs
         this.peerConnection.onconnectionstatechange = () => {
-            console.log("Connection:", this.peerConnection.connectionState);
+            const state = this.peerConnection?.connectionState;
+            console.log("Connection:", state);
+
+            if (!this.isEndingCall && (state === "failed" || state === "disconnected")) {
+                this.resetConnectionForRejoin("Peer disconnected. Waiting for rejoin...");
+            }
         };
 
         this.peerConnection.oniceconnectionstatechange = () => {
@@ -181,7 +220,11 @@ class RoomMediaController {
     }
 
     addLocalTracks() {
-        this.localStream.getTracks().forEach(track => {
+        if (!this.localStream || !this.peerConnection) {
+            return;
+        }
+
+        this.localStream.getTracks().forEach((track) => {
             this.peerConnection.addTrack(track, this.localStream);
         });
     }
@@ -196,14 +239,12 @@ class RoomMediaController {
         this.socket.onopen = () => {
             console.log("WebSocket connected");
             this.setStatus("Connected to room");
-
             this.sendSignal({ type: "join" });
         };
 
         this.socket.onmessage = async (event) => {
             const data = JSON.parse(event.data);
             console.log("Received:", data);
-
             await this.handleSignal(data);
         };
 
@@ -214,7 +255,9 @@ class RoomMediaController {
 
         this.socket.onclose = () => {
             console.log("WebSocket closed");
-            this.setStatus("Disconnected");
+            if (!this.isEndingCall) {
+                this.setStatus("Disconnected");
+            }
         };
     }
 
@@ -225,40 +268,47 @@ class RoomMediaController {
     }
 
     async handleSignal(data) {
+        if (!this.peerConnection && this.localStream) {
+            this.preparePeerConnection();
+        }
 
-        // JOIN → only one creates offer
         if (data.type === "join") {
-            if (!this.hasCreatedOffer && this.peerConnection.signalingState === "stable") {
+            if (
+                this.peerConnection &&
+                !this.hasCreatedOffer &&
+                this.peerConnection.signalingState === "stable"
+            ) {
                 this.hasCreatedOffer = true;
-
                 console.log("Creating offer...");
                 await this.createOffer();
             }
+            return;
         }
 
-        // OFFER
+        if (data.type === "leave") {
+            console.log("Peer left the room");
+            this.resetConnectionForRejoin("Peer left. Waiting for rejoin...");
+            return;
+        }
+
         if (data.type === "offer") {
             console.log("Offer received");
-
             await this.peerConnection.setRemoteDescription(data.offer);
             await this.createAnswer();
+            return;
         }
 
-        // ANSWER
         if (data.type === "answer") {
             console.log("Answer received");
-
             await this.peerConnection.setRemoteDescription(data.answer);
+            return;
         }
 
-        // ICE
-        if (data.type === "ice") {
-            if (data.candidate) {
-                try {
-                    await this.peerConnection.addIceCandidate(data.candidate);
-                } catch (e) {
-                    console.error("ICE error:", e);
-                }
+        if (data.type === "ice" && data.candidate) {
+            try {
+                await this.peerConnection.addIceCandidate(data.candidate);
+            } catch (e) {
+                console.error("ICE error:", e);
             }
         }
     }
@@ -294,7 +344,6 @@ class RoomMediaController {
     }
 }
 
-// 🔥 GLOBAL CONTROLLER (fix for unload bug)
 let controller;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -327,20 +376,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const endBtn = document.getElementById("endCallBtn");
-
     if (endBtn) {
-       endBtn.addEventListener("click", () => {
-          controller.endCall();
+        endBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            controller.endCall();
         });
     }
 });
 
-// 🔥 CLEANUP (important)
 window.addEventListener("beforeunload", () => {
-    if (!controller) return;
+    if (!controller) {
+        return;
+    }
+
+    controller.sendSignal({ type: "leave" });
+    controller.isEndingCall = true;
 
     if (controller.localStream) {
-        controller.localStream.getTracks().forEach(track => track.stop());
+        controller.localStream.getTracks().forEach((track) => track.stop());
     }
 
     if (controller.peerConnection) {
