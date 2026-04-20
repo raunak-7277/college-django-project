@@ -1,29 +1,8 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Login{% endblock %}
 
 {% block content %}
-{% comment %} <div class="container py-5">
-    <div class="mx-auto" style="max-width: 400px;">
-        <h2 class="mb-4">Login</h2>
-
-        <form>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" placeholder="Enter email">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" placeholder="Enter password">
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-                Login
-            </button>
-        </form>
-    </div>
-</div> {% endcomment %}
 <div class="container-fluid main-bg">
   <div class="row justify-content-center align-items-center vh-100">
 
@@ -34,9 +13,9 @@
 
           <!-- LEFT SIDE -->
           <div class="col-md-6 left-box text-center">
-            <img src="{% static 'images/login.svg' %}" class="img-fluid illustration">
+            <img src="{% static 'images/img1.png' %}" class="img-fluid illustration">
             <p class="info-text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Welcome to our system. Please login to continue.
             </p>
           </div>
 
