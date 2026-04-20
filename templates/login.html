@@ -3,7 +3,7 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+{% comment %} <div class="container py-5">
     <div class="mx-auto" style="max-width: 400px;">
         <h2 class="mb-4">Login</h2>
 
@@ -23,5 +23,61 @@
             </button>
         </form>
     </div>
+</div> {% endcomment %}
+<div class="container-fluid main-bg">
+  <div class="row justify-content-center align-items-center vh-100">
+
+    <div class="col-lg-8 col-md-10">
+      <div class="card login-card">
+
+        <div class="row g-0">
+
+          <!-- LEFT SIDE -->
+          <div class="col-md-6 left-box text-center">
+            <img src="{% static 'images/login.svg' %}" class="img-fluid illustration">
+            <p class="info-text">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            </p>
+          </div>
+
+          <!-- RIGHT SIDE -->
+          <div class="col-md-6 right-box">
+
+            <div class="form-container">
+
+              <span class="welcome-tag">Welcome Back</span>
+
+              <h4 class="title">Login your account</h4>
+
+              <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                  <input type="text" name="username" class="form-control custom-input" placeholder="Username">
+                </div>
+
+                <div class="mb-4">
+                  <input type="password" name="password" class="form-control custom-input" placeholder="Password">
+                </div>
+
+                <button class="btn login-btn w-100">Login</button>
+
+                <div class="links">
+                  <a href="#">Create Account</a>
+                  <a href="#">Forgot Password?</a>
+                </div>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </div>
 {% endblock %}
