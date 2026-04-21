@@ -14,7 +14,7 @@
 /* LEFT */
 .left-box {
   background: linear-gradient(135deg, #c45200, #572100);
-  color: white;
+  color: rgb(255, 255, 255);
   padding: 40px;
 }
 .illustration {
@@ -30,7 +30,7 @@
 
 /* RIGHT */
 .right-box {
-  background: white;
+  background: rgb(253, 184, 152);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,11 +74,12 @@
 }
 
 /* Button */
-.login-btn {
-   background: #ff9800;
-  color: white;
+.login-btn{
+  background: #bc4800;
+  color: rgb(255, 255, 255);
   border-radius: 20px;
   padding: 10px;
+  border: #ffffff;
 }
 
 /* Links */
@@ -93,7 +94,6 @@
   text-decoration: none;
   color: #ab4700;
 }
-
 .img-fluid{
     width: 300px;
     height: 400px;
