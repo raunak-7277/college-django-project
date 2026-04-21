@@ -4,11 +4,16 @@
 
 {% block extra_css %}
 <style>
+    .glass-nav {
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.6) !important; 
+    }
+
     .hero-section {
         min-height: 100vh;
         display: flex;
         align-items: center;
-        background: radial-gradient(circle at left, rgba(255,140,0,0.15), transparent 40%),
+        background: radial-gradient(circle at left, rgba(255,140,0,0.15), transparent 80%),
                     #0d0a07;
     }
 
@@ -46,12 +51,12 @@
 {% block content %}
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark py-3 border-bottom border-secondary">
+<nav class="navbar navbar-expand-lg sticky-top navbar-dark py-3 border-bottom border-secondary glass-nav">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{% url 'home' %}">  Video Call</a>
 
         <div class="ms-auto d-flex gap-4 align-items-center">
-            <a href="{% url 'create_room' %}" class="text-white text-decoration-none">Join as Guest</a>
+            {% comment %} <a href="{% url 'create_room' %}" class="text-white text-decoration-none">Join as Guest</a> {% endcomment %}
             <a href="{% url 'register' %}" class="text-white text-decoration-none">Register</a>
             <a href="{% url 'login' %}" class="btn cta-btn">Login</a>
         </div>
@@ -83,7 +88,7 @@
 
                 <!-- Buttons -->
                 <div class="mt-4 d-flex gap-3 flex-wrap">
-                    <a href="{% url 'create_room' %}" id="createRoomBtn" class="btn cta-btn">
+                    <a href="{% url 'register' %}" id="createRoomBtn" class="btn cta-btn">
                         Get Started Free →
                     </a>
 
@@ -92,7 +97,7 @@
                     </a>
                 </div>
 
-                <!-- Join Room -->
+                {% comment %} <!-- Join Room -->
                 <div class="mt-4">
                     <input type="text" id="roomInput"
                         class="form-control w-75"
@@ -101,7 +106,7 @@
                     <button class="btn btn-success mt-3" onclick="joinRoom()">
                         Join Room
                     </button>
-                </div>
+                </div> {% endcomment %}
 
                 <!-- Users -->
                 <div class="mt-5 d-flex align-items-center gap-3">
@@ -131,6 +136,31 @@
         </div>
     </div>
 </section>
+
+<!-- Footer -->
+<footer class="border-top mt-auto py-5" style="background:#0d0a07; color:#baab9c;">
+    <div class="container">
+
+        <!-- Top Section -->
+        <div class="row align-items-center text-center text-md-start mb-4">
+
+         
+            <!-- Links -->
+            <div class=" mb-2 mb-md-0 text-center">
+                <a href="#" class="text-decoration-none me-3 text-secondary">Privacy Policy</a>
+                <a href="#" class="text-decoration-none me-3 text-secondary">Terms</a>
+                <a href="#" class="text-decoration-none me-3 text-secondary">Contact</a>
+                <a href="#" class="text-decoration-none text-secondary">Help</a>
+            </div>
+            <p class="mb-0 text-secondary small text-center">
+                © 2026 Video Call. All rights reserved.
+            </p>
+        </div>
+
+        
+
+    </div>
+</footer>
 
 <!-- Join Script -->
 <script>

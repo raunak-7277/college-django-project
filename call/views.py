@@ -15,8 +15,33 @@ def room(request, room_id):
 
 
 def login_view(request):
-    return render(request, 'login.html')
+      if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = User.objects.filter(username=username, password=password).first()
+
+        if user:
+            return redirect("home")  
+        else:
+            return render(request, "login.html", {"error": "Invalid"})
 
 
 def register_view(request):
-    return render(request, 'register.html')
+    if request.method == "POST":
+        name = request.POST.get("name")
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        if User.objects.filter(username=username).exists():
+            return render(request, "register.html", {"error": "Username already exists"})
+
+        User.objects.create(
+            name=name,
+            username=username,
+            password=password
+        )
+
+        return redirect("login")
+
+    return render(request, "register.html")
