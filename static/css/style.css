@@ -17,7 +17,6 @@
   color: white;
   padding: 40px;
 }
-
 .illustration {
   width: 220px;
   margin-top: 40px;
@@ -59,19 +58,24 @@
 
 /* Inputs */
 .custom-input {
+   background: transparent;
   border: none;
   border-bottom: 2px solid #ffffff;
   border-radius: 0;
 }
 
+.custom-input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
 .custom-input:focus {
   box-shadow: none;
-  border-color: #c26f09;
+  border-color:  #ff9800;
 }
 
 /* Button */
 .login-btn {
-  background: linear-gradient(90deg, #e66007, #853c01);
+   background: #ff9800;
   color: white;
   border-radius: 20px;
   padding: 10px;
@@ -89,6 +93,7 @@
   text-decoration: none;
   color: #ab4700;
 }
+
 .img-fluid{
     width: 300px;
     height: 400px;
