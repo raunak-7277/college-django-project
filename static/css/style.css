@@ -1,6 +1,7 @@
 /* Background */
 .main-bg {
-  background: linear-gradient(135deg, #7b2e01, #bd5a1c);
+ background: radial-gradient(circle at left, rgba(255,140,0,0.12), transparent 100%),
+              #2c2217;
   height: 100vh;
 }
 
@@ -13,7 +14,8 @@
 
 /* LEFT */
 .left-box {
-  background: linear-gradient(135deg, #d88143, #853401);
+ background: radial-gradient(circle at bottom, rgba(255,140,0,0.2), transparent 100%),
+              #251d13;
   color: white;
   padding: 40px;
 }
@@ -44,8 +46,9 @@
 /* Tag */
 .welcome-tag {
   display: inline-block;
-  background: linear-gradient(90deg, #c5761c, #944d02);
-  color: white;
+  background-color:  #ff9800;
+  border-color: #1a140d;
+  color: black;
   padding: 6px 15px;
   border-radius: 20px;
   font-size: 13px;
@@ -59,19 +62,24 @@
 
 /* Inputs */
 .custom-input {
+   background: transparent;
   border: none;
   border-bottom: 2px solid #ccc;
   border-radius: 0;
 }
 
+.custom-input::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
 .custom-input:focus {
   box-shadow: none;
-  border-color: #c26f09;
+  border-color:  #ff9800;
 }
 
 /* Button */
 .login-btn {
-  background: linear-gradient(90deg, #e66007, #853c01);
+   background: #ff9800;
   color: white;
   border-radius: 20px;
   padding: 10px;
@@ -87,7 +95,7 @@
 
 .links a {
   text-decoration: none;
-  color: #e2782d;
+  color:  #ff9800;
 }
 .img-fluid{
     width: 300px;
