@@ -137,12 +137,8 @@ input.error-border {
         <form id="registerForm" onsubmit="return validateForm()">
 
             <!-- First Name -->
-            <input type="text" id="firstName" placeholder="First name" class="form-control mb-1">
-            <small class="error" id="firstNameError"></small>
-
-            <!-- Last Name -->
-            <input type="text" id="lastName" placeholder="Last name" class="form-control mb-1 mt-2">
-            <small class="error" id="lastNameError"></small>
+            <input type="text" id="Name" placeholder="Name" class="form-control mb-1">
+            <small class="error" id="NameError"></small>
 
             <!-- Email -->
             <input type="email" id="email" placeholder="Email" class="form-control mb-1 mt-2">
@@ -175,35 +171,26 @@ function validateForm() {
     let isValid = true;
 
     // Inputs
-    let firstName = document.getElementById("firstName");
-    let lastName = document.getElementById("lastName");
+    let Name = document.getElementById("Name");
     let email = document.getElementById("email");
     let password = document.getElementById("password");
     let check1 = document.getElementById("check1");
 
     // Errors
-    let firstNameError = document.getElementById("firstNameError");
-    let lastNameError = document.getElementById("lastNameError");
+    let NameError = document.getElementById("NameError");
     let emailError = document.getElementById("emailError");
     let passwordError = document.getElementById("passwordError");
     let checkError = document.getElementById("checkError");
 
     // Reset
-    firstNameError.innerText = "";
-    lastNameError.innerText = "";
+    NameError.innerText = "";
     emailError.innerText = "";
     passwordError.innerText = "";
     checkError.innerText = "";
 
     // First Name
-    if (firstName.value.trim() === "") {
-        firstNameError.innerText = "First name is required";
-        isValid = false;
-    }
-
-    // Last Name
-    if (lastName.value.trim() === "") {
-        lastNameError.innerText = "Last name is required";
+    if (Name.value.trim() === "") {
+        NameError.innerText = "Name is required";
         isValid = false;
     }
 

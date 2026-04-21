@@ -1,7 +1,6 @@
 /* Background */
 .main-bg {
- background: radial-gradient(circle at left, rgba(255,140,0,0.12), transparent 100%),
-              #2c2217;
+  background: linear-gradient(135deg, #341300, #9d3d01);
   height: 100vh;
 }
 
@@ -14,12 +13,10 @@
 
 /* LEFT */
 .left-box {
- background: radial-gradient(circle at bottom, rgba(255,140,0,0.2), transparent 100%),
-              #251d13;
-  color: white;
+  background: linear-gradient(135deg, #c45200, #572100);
+  color: rgb(255, 255, 255);
   padding: 40px;
 }
-
 .illustration {
   width: 220px;
   margin-top: 40px;
@@ -33,7 +30,7 @@
 
 /* RIGHT */
 .right-box {
-  background: white;
+  background: rgb(253, 184, 152);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,9 +43,8 @@
 /* Tag */
 .welcome-tag {
   display: inline-block;
-  background-color:  #ff9800;
-  border-color: #1a140d;
-  color: black;
+  background: linear-gradient(90deg, #b9680b, #793600);
+  color: white;
   padding: 6px 15px;
   border-radius: 20px;
   font-size: 13px;
@@ -64,7 +60,7 @@
 .custom-input {
    background: transparent;
   border: none;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #ffffff;
   border-radius: 0;
 }
 
@@ -78,11 +74,12 @@
 }
 
 /* Button */
-.login-btn {
-   background: #ff9800;
-  color: white;
+.login-btn{
+  background: #bc4800;
+  color: rgb(255, 255, 255);
   border-radius: 20px;
   padding: 10px;
+  border: #ffffff;
 }
 
 /* Links */
@@ -95,7 +92,7 @@
 
 .links a {
   text-decoration: none;
-  color:  #ff9800;
+  color: #ab4700;
 }
 .img-fluid{
     width: 300px;
