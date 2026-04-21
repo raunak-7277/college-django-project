@@ -1,6 +1,6 @@
 /* Background */
 .main-bg {
-  background: linear-gradient(135deg, #7b2e01, #bd5a1c);
+  background: linear-gradient(135deg, #341300, #9d3d01);
   height: 100vh;
 }
 
@@ -13,7 +13,7 @@
 
 /* LEFT */
 .left-box {
-  background: linear-gradient(135deg, #d88143, #853401);
+  background: linear-gradient(135deg, #c45200, #572100);
   color: white;
   padding: 40px;
 }
@@ -44,7 +44,7 @@
 /* Tag */
 .welcome-tag {
   display: inline-block;
-  background: linear-gradient(90deg, #c5761c, #944d02);
+  background: linear-gradient(90deg, #b9680b, #793600);
   color: white;
   padding: 6px 15px;
   border-radius: 20px;
@@ -60,7 +60,7 @@
 /* Inputs */
 .custom-input {
   border: none;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #ffffff;
   border-radius: 0;
 }
 
@@ -87,7 +87,7 @@
 
 .links a {
   text-decoration: none;
-  color: #e2782d;
+  color: #ab4700;
 }
 .img-fluid{
     width: 300px;
