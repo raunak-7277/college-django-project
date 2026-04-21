@@ -17,12 +17,12 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(180deg, #7b3dbb, #3bb2c7);
+    background: linear-gradient(180deg, #281300, #963c00);
 }
 
 {% comment %} Form Box  {% endcomment %}
 .form-box {
-    background: #2c2c6c;
+    background: #bd5500;
     padding: 35px;
     border-radius: 12px;
     width: 360px;
@@ -54,18 +54,18 @@ body {
 
 {% comment %} Input focus effect  {% endcomment %}
 .form-control:focus {
-    box-shadow: 0 0 5px #6c63ff;
-    border: 1px solid #6c63ff;
+    box-shadow: 0 0 5px #f55828;
+    border: 1px solid #fe622e;
 }
 
 {% comment %} Checkbox text  {% endcomment %}
 .form-check-label {
-    color: #ddd;
+    color: #ffffff;
 }
 
 {% comment %} Button  {% endcomment %}
 .register-btn {
-    background: linear-gradient(45deg, #4CAF50, #2ecc71);
+    background: linear-gradient(45deg, #f7c82e , #d29000 , #f7c82e);
     color: white;
     border-radius: 8px;
     font-weight: bold;
@@ -76,20 +76,20 @@ body {
 
 {% comment %} Button hover  {% endcomment %}
 .register-btn:hover {
-    background: linear-gradient(45deg, #45a049, #27ae60);
+    background: linear-gradient(45deg, #f7c82e , #996900);
     transform: scale(1.03);
 }
 
 {% comment %} Error Text {% endcomment %}
 .error {
-    color: #ff6b6b;
+    color: #000000;
     font-size: 12px;
     margin-left: 5px;
 }
 
 {% comment %} Error Border  {% endcomment %}
 input.error-border {
-    border: 2px solid #ff6b6b;
+    border: 2px solid #000000;
 }
 
 {% comment %} Responsive (Mobile) {% endcomment %}
@@ -132,7 +132,7 @@ input.error-border {
 <div class="main-container">
     <div class="form-box">
 
-        <h2 class="form-title">Registration Form</h2>
+        <h2 class="form-title">Create Account</h2>
 
         <form id="registerForm" onsubmit="return validateForm()">
 
