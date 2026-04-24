@@ -1,62 +1,110 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}Login{% endblock %}
 
+{% block extra_css %}
+<style>
+    .auth-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        max-width: 420px;
+        width: 100%;
+    }
+
+    .form-control {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: white;
+        border-radius: 8px;
+    }
+
+    .form-control:focus {
+        background: rgba(255,255,255,0.12);
+        border-color: #ff9800;
+        color: white;
+        box-shadow: 0 0 0 0.2rem rgba(255,152,0,0.25);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255,255,255,0.4);
+    }
+
+    .btn-login {
+        background: #ff9800;
+        border: none;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .btn-login:hover {
+        background: #e68900;
+        color: white;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid main-bg">
-  <div class="row justify-content-center align-items-center vh-100">
+<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px);">
+    <div class="auth-card">
 
-    <div class="col-lg-8 col-md-10">
-      <div class="card login-card">
+        <h3 class="fw-bold mb-1">Welcome Back 👋</h3>
+        <p class="text-secondary mb-4">Login to start your video call</p>
 
-        <div class="row g-0">
+        <!-- Error Message -->
+        {% if error %}
+        <div class="alert alert-danger py-2" role="alert">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
 
-          <!-- LEFT SIDE -->
-          <div class="col-md-6 left-box text-center">
-            <img src="{% static 'images/img1.png' %}" class="img-fluid illustration">
-            <p class="info-text">
-              Welcome to our system. Please login to continue.
-            </p>
-          </div>
+        <!-- Success redirect hint -->
+        {% if next %}
+        <div class="alert alert-warning py-2" role="alert">
+            🔒 Please login first to access that page.
+        </div>
+        {% endif %}
 
-          <!-- RIGHT SIDE -->
-          <div class="col-md-6 right-box">
+        <form method="POST">
+            {% csrf_token %}
 
-            <div class="form-container">
-
-              <span class="welcome-tag">Welcome Back</span>
-
-              <h4 class="title">Login your account</h4>
-
-              <form method="POST">
-                {% csrf_token %}
-
-                <div class="mb-4">
-                  <input type="text" name="username" class="form-control custom-input" placeholder="Username">
-                </div>
-
-                <div class="mb-4">
-                  <input type="password" name="password" class="form-control custom-input" placeholder="Password">
-                </div>
-
-                <button class=" login-btn w-100">Login</button>
-
-                <div class="links">
-                  <a href="#">Create Account</a>
-                  <a href="#">Forgot Password?</a>
-                </div>
-
-              </form>
-
+            <!-- Username -->
+            <div class="mb-3">
+                <label class="form-label text-secondary small">Username</label>
+                <input
+                    type="text"
+                    name="username"
+                    class="form-control"
+                    placeholder="Enter your username"
+                    required
+                >
             </div>
 
-          </div>
+            <!-- Password -->
+            <div class="mb-4">
+                <label class="form-label text-secondary small">Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
 
-        </div>
+            <button type="submit" class="btn btn-login text-white w-100">
+                Sign In →
+            </button>
+        </form>
 
-      </div>
+        <p class="text-center text-secondary mt-3 mb-0 small">
+            Don't have an account?
+            <a href="{% url 'register' %}" class="text-warning text-decoration-none">Register here</a>
+        </p>
+
     </div>
-
-  </div>
 </div>
 {% endblock %}

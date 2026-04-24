@@ -151,35 +151,6 @@ class RoomMediaController {
         this.setStatus(message);
     }
 
-    endCall() {
-        console.log("Ending call...");
-        this.isEndingCall = true;
-
-        this.sendSignal({ type: "leave" });
-        this.cleanupPeerConnection();
-
-        if (this.localStream) {
-            this.localStream.getTracks().forEach(track => track.stop());
-            this.localStream = null;
-        }
-
-        if (this.localVideo) {
-            this.localVideo.srcObject = null;
-        }
-
-        this.updateControlStates(false);
-
-        if (this.socket) {
-            this.socket.close();
-            this.socket = null;
-        }
-
-        this.setStatus("Call ended");
-
-        setTimeout(() => {
-            window.location.href = "/";
-        }, 500);
-    }
 
     createPeerConnection() {
         this.peerConnection = new RTCPeerConnection({

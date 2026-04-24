@@ -50,19 +50,6 @@
 
 {% block content %}
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg sticky-top navbar-dark py-3 border-bottom border-secondary glass-nav">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'home' %}">  Video Call</a>
-
-        <div class="ms-auto d-flex gap-4 align-items-center">
-            {% comment %} <a href="{% url 'create_room' %}" class="text-white text-decoration-none">Join as Guest</a> {% endcomment %}
-            <a href="{% url 'register' %}" class="text-white text-decoration-none">Register</a>
-            <a href="{% url 'login' %}" class="btn cta-btn">Login</a>
-        </div>
-    </div>
-</nav>
-
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
@@ -96,17 +83,6 @@
                         Login
                     </a>
                 </div>
-
-                {% comment %} <!-- Join Room -->
-                <div class="mt-4">
-                    <input type="text" id="roomInput"
-                        class="form-control w-75"
-                        placeholder="Enter Room ID">
-
-                    <button class="btn btn-success mt-3" onclick="joinRoom()">
-                        Join Room
-                    </button>
-                </div> {% endcomment %}
 
                 <!-- Users -->
                 <div class="mt-5 d-flex align-items-center gap-3">
@@ -144,8 +120,6 @@
         <!-- Top Section -->
         <div class="row align-items-center text-center text-md-start mb-4">
 
-         
-            <!-- Links -->
             <div class=" mb-2 mb-md-0 text-center">
                 <a href="#" class="text-decoration-none me-3 text-secondary">Privacy Policy</a>
                 <a href="#" class="text-decoration-none me-3 text-secondary">Terms</a>

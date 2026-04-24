@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - {{ user.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .action-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        transition: border-color 0.2s;
+    }
+
+    .action-card:hover {
+        border-color: #ff9800;
+    }
+
+    .btn-orange {
+        background: #ff9800;
+        border: none;
+        font-weight: 600;
+        border-radius: 8px;
+        color: white;
+        padding: 10px 24px;
+    }
+
+    .btn-orange:hover {
+        background: #e68900;
+        color: white;
+    }
+
+    .form-control {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: white;
+        border-radius: 8px;
+    }
+
+    .form-control:focus {
+        background: rgba(255,255,255,0.12);
+        border-color: #ff9800;
+        color: white;
+        box-shadow: 0 0 0 0.2rem rgba(255,152,0,0.25);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255,255,255,0.4);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Welcome Header -->
+    <div class="mb-5">
+        <h2 class="fw-bold">Hello, {{ user.name }} 👋</h2>
+        <p class="text-secondary">What would you like to do today?</p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Create Room Card -->
+        <div class="col-md-6">
+            <div class="action-card h-100">
+                <div class="mb-3" style="font-size: 2.5rem;">🎥</div>
+                <h4 class="fw-bold">Create a Room</h4>
+                <p class="text-secondary">Start a new video call. A unique room code will be generated for you to share.</p>
+                <a
+                    href="{% url 'create_room' %}?user={{ user.username }}"
+                    class="btn btn-orange mt-2"
+                >
+                    Create Room →
+                </a>
+            </div>
+        </div>
+
+        <!-- Join Room Card -->
+        <div class="col-md-6">
+            <div class="action-card h-100">
+                <div class="mb-3" style="font-size: 2.5rem;">🔗</div>
+                <h4 class="fw-bold">Join a Room</h4>
+                <p class="text-secondary">Have a room code? Enter it below to join an existing video call.</p>
+
+                <!-- Join Form -->
+                <form method="GET" action="{% url 'join_room' %}">
+                    <input type="hidden" name="user" value="{{ user.username }}">
+                    <div class="d-flex gap-2 mt-2">
+                        <input
+                            type="text"
+                            name="room_id"
+                            class="form-control"
+                            placeholder="Enter room code"
+                            required
+                        >
+                        <button type="submit" class="btn btn-orange">Join</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Quick link to history -->
+    <div class="mt-4 text-secondary">
+        <a href="{% url 'meeting_history' %}?user={{ user.username }}" class="text-warning text-decoration-none">
+            📋 View your meeting history →
+        </a>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Handle the join form: convert GET params to proper URL
+    document.querySelector('form[action*="join-room"]').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const roomId = this.querySelector('input[name="room_id"]').value.trim();
+        const username = this.querySelector('input[name="user"]').value;
+        if (roomId) {
+            window.location.href = `/room/${roomId}/?user=${username}`;
+        } else {
+            alert('Please enter a room code!');
+        }
+    });
+</script>
+{% endblock %}

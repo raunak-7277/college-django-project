@@ -1,82 +1,133 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Meeting Room{% endblock %}
+{% block title %}Meeting Room - {{ room_id }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .room-wrapper {
+        min-height: calc(100vh - 70px);
+        padding: 1.5rem;
+    }
+
+    .video-panel {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 1.2rem;
+    }
+
+    .sidebar-panel {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: 100%;
+    }
+
+    .room-id-box {
+        background: rgba(255,152,0,0.1);
+        border: 1px solid rgba(255,152,0,0.3);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-family: monospace;
+        font-size: 0.9rem;
+        color: #ff9800;
+        cursor: pointer;
+        user-select: all;
+        word-break: break-all;
+    }
+
+    video {
+        width: 100%;
+        border-radius: 8px;
+        background: #111;
+        min-height: 200px;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
-    <div class="row">
+<div class="room-wrapper">
+    <div class="row g-3">
 
         <!-- Main Video Area -->
         <div class="col-lg-9">
-            <div class="border rounded p-3 p-lg-4">
-                
-                <!-- Header -->
+            <div class="video-panel">
+
+                <!-- Room Header -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <div>
-                        <h2 class="h4 mb-1">Meeting Room</h2>
-                        <p class="text-secondary mb-0">Room ID: {{ room_id }}</p>
+                        <h5 class="mb-1 fw-bold">Meeting Room</h5>
+                        <!-- Click the box to copy room ID -->
+                        <div
+                            class="room-id-box"
+                            title="Click to copy Room ID"
+                            onclick="copyRoomId()"
+                        >
+                            🔑 {{ room_id }} &nbsp;<small style="opacity:0.6">(click to copy)</small>
+                        </div>
                     </div>
-                    <span class="badge text-bg-dark border">Live</span>
+                    <span class="badge text-bg-dark border px-3 py-2">🔴 Live</span>
                 </div>
 
-                <!-- Video Section -->
+                <!-- Videos -->
                 <div class="row g-3">
 
                     <!-- Local Video -->
                     <div class="col-md-6">
-                        <div class="border rounded p-2">
-                            <p class="small text-secondary mb-2">You</p>
-                            <video
-                                id="localVideo"
-                                class="w-100 rounded bg-black"
-                                autoplay
-                                muted
-                                playsinline
-                            ></video>
+                        <div class="video-panel">
+                            <p class="small text-secondary mb-2">
+                                👤 You
+                                {% if user %} — <strong>{{ user.name }}</strong>{% endif %}
+                            </p>
+                            <video id="localVideo" autoplay muted playsinline></video>
                         </div>
                     </div>
 
                     <!-- Remote Video -->
                     <div class="col-md-6">
-                        <div class="border rounded p-2">
-                            <p class="small text-secondary mb-2">Remote</p>
-                            <video
-                                id="remoteVideo"
-                                class="w-100 rounded bg-black"
-                                autoplay
-                                playsinline
-                                muted
-                            ></video>
+                        <div class="video-panel">
+                            <p class="small text-secondary mb-2">👤 Remote</p>
+                            <video id="remoteVideo" autoplay playsinline></video>
                         </div>
                     </div>
 
                 </div>
 
                 <!-- Status -->
-                <p id="mediaStatus" class="small text-secondary mt-3 mb-0">
-                    Connecting...
-                </p>
+                <p id="mediaStatus" class="small text-secondary mt-3 mb-0">Connecting...</p>
 
             </div>
         </div>
 
         <!-- Sidebar -->
         <div class="col-lg-3">
-            <div class="border rounded p-4">
-                
-                <h4>Participants</h4>
-                <ul class="list-unstyled">
-                    <li>You</li>
-                    <li>Waiting for others...</li>
+            <div class="sidebar-panel">
+
+                <h6 class="fw-bold mb-3">Participants</h6>
+                <ul class="list-unstyled text-secondary small">
+                    <li class="mb-1">
+                        ✅ You
+                        {% if user %} ({{ user.name }}){% endif %}
+                    </li>
+                    <li>⏳ Waiting for others...</li>
                 </ul>
 
-                <!-- Controls (UI only for now) -->
-                <div class="d-grid gap-2 mt-4">
+                <hr style="border-color: rgba(255,255,255,0.1);">
+
+                <!-- Controls -->
+                <div class="d-grid gap-2">
                     <button id="micBtn" type="button" class="btn btn-primary" disabled>Mic ON</button>
                     <button id="cameraBtn" type="button" class="btn btn-secondary" disabled>Camera ON</button>
                     <button id="endCallBtn" type="button" class="btn btn-danger">End Call</button>
                 </div>
+
+                <hr style="border-color: rgba(255,255,255,0.1);">
+
+                <!-- Share info -->
+                <p class="text-secondary small mb-1">Share this room ID:</p>
+                <div class="room-id-box" onclick="copyRoomId()">{{ room_id }}</div>
 
             </div>
         </div>
@@ -86,15 +137,44 @@
 {% endblock %}
 
 {% block extra_js %}
-
-<!-- ✅ Pass room ID safely -->
+<!-- Pass room ID to JS safely -->
 <script>
     window.roomConfig = {
         roomId: "{{ room_id|escapejs }}"
     };
+
+    // Copy room ID to clipboard
+    function copyRoomId() {
+        navigator.clipboard.writeText("{{ room_id|escapejs }}")
+            .then(() => alert("Room ID copied: {{ room_id|escapejs }}"))
+            .catch(() => alert("Room ID: {{ room_id|escapejs }}"));
+    }
 </script>
 
-<!-- ✅ Load WebRTC logic -->
+<!-- WebRTC logic -->
 <script src="{% static 'js/room.js' %}"></script>
 
+<script>
+    const _origEndCall = RoomMediaController.prototype.endCall;
+    RoomMediaController.prototype.endCall = function() {
+        this.isEndingCall = true;
+        this.sendSignal({ type: "leave" });
+        this.cleanupPeerConnection();
+
+        if (this.localStream) {
+            this.localStream.getTracks().forEach(t => t.stop());
+            this.localStream = null;
+        }
+        if (this.localVideo) this.localVideo.srcObject = null;
+        this.updateControlStates(false);
+        if (this.socket) { this.socket.close(); this.socket = null; }
+        this.setStatus("Call ended");
+
+        {% if user %}
+            setTimeout(() => { window.location.href = "/dashboard/?user={{ user.username|escapejs }}"; }, 500);
+        {% else %}
+            setTimeout(() => { window.location.href = "/"; }, 500);
+        {% endif %}
+    };
+</script>
 {% endblock %}
