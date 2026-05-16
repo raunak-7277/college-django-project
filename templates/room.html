@@ -71,6 +71,20 @@
                     <span class="badge text-bg-dark border px-3 py-2">🔴 Live</span>
                 </div>
 
+                <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+
+                 <div id="call-timer" class="card shadow-lg border-0 rounded-4 bg-dark text-white">
+
+                   <div class="card-body d-flex align-items-center gap-3 px-4 py-3">
+
+                          <div>
+                              <small class="text-secondary d-block">Call Time Remaining</small>
+                              <span id="timer-text"class="fw-bold fs-4">30:00</span>
+                        </div>
+                  </div>
+                 </div>
+                </div>
+ 
                 <!-- Videos -->
                 <div class="row g-3">
 
@@ -156,6 +170,76 @@
 
 <script>
     const _origEndCall = RoomMediaController.prototype.endCall;
+    let isPremiumRoom =
+    "{{ is_premium_room|lower }}"
+    === "true";
+
+const timerText =
+    document.getElementById("timer-text");
+
+if (!isPremiumRoom) {
+
+    const meetingCreatedAt =
+        Number("{{ meeting_created_at }}")
+        * 1000;
+
+    const meetingDuration =
+        30 * 60 * 1000;
+
+    const meetingEndTime =
+        meetingCreatedAt + meetingDuration;
+
+    const timer =
+        setInterval(() => {
+
+        const now =
+            new Date().getTime();
+
+        const remaining =
+            meetingEndTime - now;
+
+        if (remaining <= 0) {
+
+            clearInterval(timer);
+
+            timerText.innerHTML =
+                "00:00";
+
+            alert(
+                "Meeting time ended."
+            );
+
+            window.location.href = "/dashboard/?user={{ user.username|escapejs }}";
+
+            return;
+        }
+
+        const minutes =
+            Math.floor(
+                remaining / 1000 / 60
+            );
+
+        const seconds =
+            Math.floor(
+                (remaining / 1000) % 60
+            );
+
+        timerText.innerHTML =
+            `${minutes}:${
+                seconds < 10
+                ? "0" + seconds
+                : seconds
+            }`;
+
+    }, 1000);
+
+} else {
+
+    timerText.innerHTML =
+        "Unlimited";
+
+    }
+
     RoomMediaController.prototype.endCall = function() {
         this.isEndingCall = true;
         this.sendSignal({ type: "leave" });

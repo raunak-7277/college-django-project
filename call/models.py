@@ -1,6 +1,5 @@
 from django.db import models
-
-from django.db import models
+from django.utils import timezone
 
 class User(models.Model):
     name = models.CharField(max_length=100)
@@ -17,20 +16,27 @@ class User(models.Model):
         blank=True,
         null=True
     )
+    is_paid = models.BooleanField(
+        default=False
+    )
 
     def __str__(self):
         return self.username
 
 class Meeting(models.Model):
-    user = models.ForeignKey(
+    creator = models.ForeignKey(
         User,
         on_delete=models.CASCADE
     )
 
     meeting_code = models.CharField(max_length=100)
 
-    date = models.DateTimeField(
-        auto_now_add=True
+    is_premium = models.BooleanField(
+        default=False
+    )
+
+    created_at = models.DateTimeField(
+        default=timezone.now
     )
 
     def __str__(self):

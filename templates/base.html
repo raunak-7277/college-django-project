@@ -48,7 +48,7 @@
 
             <div class="ms-auto d-flex gap-3 align-items-center">
 
-                {% if user %}
+                {% if user and user.username %}
                     <!-- Logged-in state: show username + nav links -->
                     <span class="text-secondary">👤 {{ user.name }}</span>
                     <a href="{% url 'meeting_history' %}?user={{ user.username }}" class="text-white text-decoration-none">History</a>

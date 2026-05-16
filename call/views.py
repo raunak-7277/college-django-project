@@ -1,7 +1,6 @@
 import uuid
 from django.shortcuts import render, redirect
-from .models import User, Meeting
-
+from .models import User, Meeting 
 
 # ─────────────────────────────────────────────
 #  HELPER: get logged-in user from URL param
@@ -38,8 +37,9 @@ def create_room(request):
 
     # Save meeting to database
     Meeting.objects.create(
-        user=user,
-        meeting_code=room_id
+        creator=user,
+        meeting_code=room_id,   
+        is_premium=user.is_paid
     )
 
     # Redirect to the room, carrying the username in URL
@@ -50,18 +50,36 @@ def create_room(request):
 #  ROOM PAGE
 # ─────────────────────────────────────────────
 def room(request, room_id):
-    # Must be logged in to join a room
+
+    # Must be logged in
     username = request.GET.get('user')
-    user = User.objects.filter(username=username).first() if username else None
+
+    user = User.objects.filter(
+        username=username
+    ).first() if username else None
 
     if not user:
         return redirect('login')
 
-    return render(request, 'room.html', {
-        'room_id': room_id,
-        'user': user
-    })
+    # Get meeting
+    meeting = Meeting.objects.filter(
+        meeting_code=room_id
+    ).first()
 
+    return render(request, 'room.html', {
+
+        'room_id': room_id,
+
+        'user': user,
+
+        # Shared room timer
+        'meeting_created_at':
+            meeting.created_at.timestamp(),
+
+        # Premium room based on creator
+        'is_premium_room':
+            meeting.is_premium
+    })
 
 # ─────────────────────────────────────────────
 #  JOIN ROOM (from home page form)
@@ -158,7 +176,8 @@ def register_view(request):
         User.objects.create(
             name=name,
             username=username,
-            password=password  # plain text (fine for college project)
+            password=password,
+            is_paid=False
         )
 
         # Registration success → go to login
@@ -199,7 +218,7 @@ def meeting_history(request):
         return redirect('login')
 
     # Get all meetings for this user, newest first
-    meetings = Meeting.objects.filter(user=user).order_by('-date')
+    meetings = Meeting.objects.filter(creator=user).order_by('-created_at')
 
     return render(request, 'meeting_history.html', {
         'user': user,
