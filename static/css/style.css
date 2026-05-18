@@ -3,13 +3,26 @@ body {
     background: #0d0a07;
     color: white;
 }
+/* Used in:
+   - templates/base.html
+*/
 
 .glass-nav {
     backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, 0.6) !important;
 }
+/* Used in:
+   - templates/base.html
+   - templates/home.html
+*/
 
 .cta-btn,
+/* Used in:
+   - templates/dashboard.html
+   - templates/login.html
+   - templates/register.html
+   - templates/room.html
+*/
 .btn-orange {
     background: #ff9800;
     border: none;
@@ -32,6 +45,12 @@ body {
     border-radius: 8px;
     padding: 10px 24px;
 }
+/* Used in:
+   - templates/create_room.html
+   - templates/dashboard.html
+   - templates/login.html
+   - templates/register.html
+*/
 
 .form-control {
     background: rgba(255,255,255,0.08);
@@ -50,6 +69,10 @@ body {
 .form-control::placeholder {
     color: rgba(255,255,255,0.4);
 }
+/* Used in:
+   - templates/login.html
+   - templates/register.html
+*/
 
 .auth-card {
     background: rgba(255,255,255,0.05);
@@ -59,14 +82,30 @@ body {
     max-width: 420px;
     width: 100%;
 }
+/* Used in:
+   - templates/login.html
+   - templates/register.html
+*/
 
 .auth-page {
     min-height: calc(100vh - 80px);
 }
+/* Used in:
+   - templates/dashboard.html
+*/
 
 .action-card,
+/* Used in:
+   - templates/meeting_history.html
+*/
 .history-card,
+/* Used in:
+   - templates/staff_dashboard.html
+*/
 .metric-box,
+/* Used in:
+   - templates/staff_dashboard.html
+*/
 .table-panel {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
@@ -82,10 +121,16 @@ body {
 .history-card:hover {
     border-color: #ff9800;
 }
+/* Used in:
+   - templates/dashboard.html
+*/
 
 .action-icon {
     font-size: 2.5rem;
 }
+/* Used in:
+   - templates/login.html
+*/
 
 .role-options {
     display: grid;
@@ -97,6 +142,9 @@ body {
     position: absolute;
     opacity: 0;
 }
+/* Used in:
+   - templates/login.html
+*/
 
 .role-option {
     border: 1px solid rgba(255,255,255,0.15);
@@ -115,6 +163,9 @@ body {
     border-color: #ff9800;
     color: white;
 }
+/* Used in:
+   - templates/home.html
+*/
 
 .hero-section {
     min-height: 100vh;
@@ -122,50 +173,80 @@ body {
     align-items: center;
     background: radial-gradient(circle at left, rgba(255,140,0,0.15), transparent 80%), #0d0a07;
 }
+/* Used in:
+   - templates/home.html
+*/
 
 .hero-title {
     font-size: 4rem;
     font-weight: 800;
     line-height: 1.1;
 }
+/* Used in:
+   - templates/home.html
+*/
 
 .gradient-text {
     color: #ff9800;
 }
 
 .hero-section .cta-btn,
+/* Used in:
+   - templates/home.html
+*/
 .demo-btn {
     border-radius: 30px;
     padding: 14px 28px;
 }
+/* Used in:
+   - templates/home.html
+*/
 
 .mock-video {
     background: #d9d9c9;
     border-radius: 20px;
     height: 320px;
 }
+/* Used in:
+   - templates/home.html
+*/
 
 .hero-image {
     object-fit: cover;
     object-position: top;
 }
+/* Used in:
+   - templates/home.html
+*/
 
 .hero-avatar {
     width: 45px;
     height: 45px;
 }
+/* Used in:
+   - templates/home.html
+*/
 
 .site-footer {
     background: #0d0a07;
     color: #baab9c;
 }
+/* Used in:
+   - templates/room.html
+*/
 
 .room-wrapper {
     min-height: calc(100vh - 70px);
     padding: 1.5rem;
 }
+/* Used in:
+   - templates/room.html
+*/
 
 .video-panel,
+/* Used in:
+   - templates/room.html
+*/
 .sidebar-panel {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.1);
@@ -180,6 +261,9 @@ body {
     height: 100%;
     padding: 1.5rem;
 }
+/* Used in:
+   - templates/room.html
+*/
 
 .room-id-box {
     background: rgba(255,152,0,0.1);
@@ -193,14 +277,23 @@ body {
     user-select: all;
     word-break: break-all;
 }
+/* Used in:
+   - templates/room.html
+*/
 
 .room-separator {
     border-color: rgba(255,255,255,0.1);
 }
+/* Used in:
+   - templates/room.html
+*/
 
 .room-hint {
     opacity: 0.6;
 }
+/* Used in:
+   - templates/room.html
+*/
 
 .timer-toast {
     z-index: 1050;
@@ -219,6 +312,9 @@ video {
     margin-bottom: 1rem;
     transition: border-color 0.2s;
 }
+/* Used in:
+   - templates/meeting_history.html
+*/
 
 .meeting-code {
     font-family: monospace;
@@ -226,18 +322,27 @@ video {
     color: #ff9800;
     font-weight: 600;
 }
+/* Used in:
+   - templates/meeting_history.html
+*/
 
 .history-grid {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 1rem;
 }
+/* Used in:
+   - templates/meeting_history.html
+*/
 
 .empty-state {
     text-align: center;
     padding: 4rem 2rem;
     color: rgba(255,255,255,0.3);
 }
+/* Used in:
+   - templates/meeting_history.html
+*/
 
 .empty-icon {
     font-size: 3rem;
@@ -252,6 +357,9 @@ video {
     border-radius: 10px;
     overflow: hidden;
 }
+/* Used in:
+   - templates/staff_dashboard.html
+*/
 
 .staff-table {
     color: white;
@@ -271,6 +379,9 @@ video {
     border-color: rgba(255,255,255,0.1);
     padding: 1rem;
 }
+/* Used in:
+   - templates/staff_dashboard.html
+*/
 
 .status-pill {
     border-radius: 999px;
@@ -279,11 +390,17 @@ video {
     font-weight: 700;
     padding: 0.25rem 0.65rem;
 }
+/* Used in:
+   - templates/staff_dashboard.html
+*/
 
 .status-paid {
     background: rgba(25,135,84,0.18);
     color: #75d69c;
 }
+/* Used in:
+   - templates/staff_dashboard.html
+*/
 
 .status-free {
     background: rgba(255,193,7,0.16);

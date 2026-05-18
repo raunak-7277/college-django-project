@@ -1,5 +1,4 @@
 import uuid
-
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
