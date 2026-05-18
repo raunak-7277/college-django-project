@@ -3,52 +3,8 @@
 
 {% block title %}Register{% endblock %}
 
-{% block extra_css %}
-<style>
-    .auth-card {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 16px;
-        padding: 2rem;
-        max-width: 420px;
-        width: 100%;
-    }
-
-    .form-control {
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.15);
-        color: white;
-        border-radius: 8px;
-    }
-
-    .form-control:focus {
-        background: rgba(255,255,255,0.12);
-        border-color: #ff9800;
-        color: white;
-        box-shadow: 0 0 0 0.2rem rgba(255,152,0,0.25);
-    }
-
-    .form-control::placeholder {
-        color: rgba(255,255,255,0.4);
-    }
-
-    .btn-register {
-        background: #ff9800;
-        border: none;
-        font-weight: 600;
-        border-radius: 8px;
-        padding: 10px;
-    }
-
-    .btn-register:hover {
-        background: #e68900;
-        color: white;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px);">
+<div class="auth-page d-flex justify-content-center align-items-center">
     <div class="auth-card">
 
         <h3 class="fw-bold mb-1">Create Account</h3>
@@ -114,7 +70,7 @@
                 >
             </div>
 
-            <button type="submit" class="btn btn-register text-white w-100">
+            <button type="submit" class="btn btn-orange w-100">
                 Create Account →
             </button>
         </form>

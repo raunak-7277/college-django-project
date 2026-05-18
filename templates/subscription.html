@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscription{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1 class="fw-bold">
+            Upgrade Your Plan
+        </h1>
+
+        <p class="text-muted">
+            Unlock premium meetings and features
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        {% for plan in plans %}
+
+        <div class="col-md-4">
+
+            <div class="card shadow-lg border-0 h-100">
+
+                <div class="card-body text-center p-4">
+
+                    <h3 class="fw-bold">
+                        {{ plan.name }}
+                    </h3>
+
+                    <h1 class="my-4">
+                        ₹{{ plan.price }}
+                    </h1>
+
+                    <a href="/buy-plan/{{ plan.id }}/?user={{ user.username }}"
+                       class="btn btn-dark w-100">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

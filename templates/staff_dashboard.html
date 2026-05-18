@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Dashboard{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Staff Dashboard</h2>
+            <p class="text-secondary mb-0">Signed in as {{ staff_user.name }}</p>
+        </div>
+        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm px-3 rounded-pill">Logout</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="metric-box">
+                <div class="text-secondary small">Total Users</div>
+                <div class="display-6 fw-bold">{{ total_users }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="metric-box">
+                <div class="text-secondary small">Paid Members</div>
+                <div class="display-6 fw-bold">{{ paid_users }}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="metric-box">
+                <div class="text-secondary small">Free Members</div>
+                <div class="display-6 fw-bold">{{ free_users }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-panel">
+        <div class="table-responsive">
+            <table class="table staff-table align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Membership</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app_user in app_users %}
+                    <tr>
+                        <td>{{ app_user.name }}</td>
+                        <td>{{ app_user.username }}</td>
+                        <td>
+                            {% if app_user.is_paid %}
+                                <span class="status-pill status-paid">Paid</span>
+                            {% else %}
+                                <span class="status-pill status-free">Free</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-secondary py-5">No users found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

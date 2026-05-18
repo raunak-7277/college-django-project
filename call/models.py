@@ -23,6 +23,25 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+
+class Staff(models.Model):
+    name = models.CharField(max_length=100)
+
+    username = models.CharField(
+        max_length=100,
+        unique=True
+    )
+
+    password = models.CharField(max_length=255)
+
+    is_active = models.BooleanField(
+        default=True
+    )
+
+    def __str__(self):
+        return self.username
+
+
 class Meeting(models.Model):
     creator = models.ForeignKey(
         User,
@@ -39,5 +58,15 @@ class Meeting(models.Model):
         default=timezone.now
     )
 
+    ended_at = models.DateTimeField(
+        blank=True,
+        null=True
+    )
+
     def __str__(self):
-        return self.meeting_code        
+        return self.meeting_code
+
+    def end_meeting(self):
+        if not self.ended_at:
+            self.ended_at = timezone.now()
+            self.save(update_fields=['ended_at'])

@@ -3,52 +3,8 @@
 
 {% block title %}Login{% endblock %}
 
-{% block extra_css %}
-<style>
-    .auth-card {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 16px;
-        padding: 2rem;
-        max-width: 420px;
-        width: 100%;
-    }
-
-    .form-control {
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.15);
-        color: white;
-        border-radius: 8px;
-    }
-
-    .form-control:focus {
-        background: rgba(255,255,255,0.12);
-        border-color: #ff9800;
-        color: white;
-        box-shadow: 0 0 0 0.2rem rgba(255,152,0,0.25);
-    }
-
-    .form-control::placeholder {
-        color: rgba(255,255,255,0.4);
-    }
-
-    .btn-login {
-        background: #ff9800;
-        border: none;
-        font-weight: 600;
-        border-radius: 8px;
-        padding: 10px;
-    }
-
-    .btn-login:hover {
-        background: #e68900;
-        color: white;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px);">
+<div class="auth-page d-flex justify-content-center align-items-center">
     <div class="auth-card">
 
         <h3 class="fw-bold mb-1">Welcome Back 👋</h3>
@@ -70,6 +26,24 @@
 
         <form method="POST">
             {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label text-secondary small">Login As</label>
+                <div class="role-options">
+                    <label>
+                        <input type="radio" name="role" value="user" {% if selected_role == 'user' or not selected_role %}checked{% endif %}>
+                        <span class="role-option d-block">User</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="role" value="staff" {% if selected_role == 'staff' %}checked{% endif %}>
+                        <span class="role-option d-block">Staff</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="role" value="admin" {% if selected_role == 'admin' %}checked{% endif %}>
+                        <span class="role-option d-block">Admin</span>
+                    </label>
+                </div>
+            </div>
 
             <!-- Username -->
             <div class="mb-3">
@@ -95,16 +69,10 @@
                 >
             </div>
 
-            <button type="submit" class="btn btn-login text-white w-100">
+            <button type="submit" class="btn btn-orange w-100">
                 Sign In →
             </button>
         </form>
-
-        <div class="text-center mt-3">
-
-            <a href="/admin/" class="btn btn-dark">Administrator Login</a>
-        </div>
-
         <p class="text-center text-secondary mt-3 mb-0 small">
             Don't have an account?
             <a href="{% url 'register' %}" class="text-warning text-decoration-none">Register here</a>

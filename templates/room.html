@@ -3,50 +3,6 @@
 
 {% block title %}Meeting Room - {{ room_id }}{% endblock %}
 
-{% block extra_css %}
-<style>
-    .room-wrapper {
-        min-height: calc(100vh - 70px);
-        padding: 1.5rem;
-    }
-
-    .video-panel {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 12px;
-        padding: 1.2rem;
-    }
-
-    .sidebar-panel {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 12px;
-        padding: 1.5rem;
-        height: 100%;
-    }
-
-    .room-id-box {
-        background: rgba(255,152,0,0.1);
-        border: 1px solid rgba(255,152,0,0.3);
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        font-family: monospace;
-        font-size: 0.9rem;
-        color: #ff9800;
-        cursor: pointer;
-        user-select: all;
-        word-break: break-all;
-    }
-
-    video {
-        width: 100%;
-        border-radius: 8px;
-        background: #111;
-        min-height: 200px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="room-wrapper">
     <div class="row g-3">
@@ -65,13 +21,13 @@
                             title="Click to copy Room ID"
                             onclick="copyRoomId()"
                         >
-                            🔑 {{ room_id }} &nbsp;<small style="opacity:0.6">(click to copy)</small>
+                            🔑 {{ room_id }} &nbsp;<small class="room-hint">(click to copy)</small>
                         </div>
                     </div>
                     <span class="badge text-bg-dark border px-3 py-2">🔴 Live</span>
                 </div>
 
-                <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+                <div class="timer-toast position-fixed top-0 end-0 p-3">
 
                  <div id="call-timer" class="card shadow-lg border-0 rounded-4 bg-dark text-white">
 
@@ -128,7 +84,7 @@
                     <li>⏳ Waiting for others...</li>
                 </ul>
 
-                <hr style="border-color: rgba(255,255,255,0.1);">
+                <hr class="room-separator">
 
                 <!-- Controls -->
                 <div class="d-grid gap-2">
@@ -137,11 +93,18 @@
                     <button id="endCallBtn" type="button" class="btn btn-danger">End Call</button>
                 </div>
 
-                <hr style="border-color: rgba(255,255,255,0.1);">
+                <hr class="room-separator">
 
                 <!-- Share info -->
                 <p class="text-secondary small mb-1">Share this room ID:</p>
                 <div class="room-id-box" onclick="copyRoomId()">{{ room_id }}</div>
+
+                <hr class="room-separator">
+
+                {% if not user.is_paid %}
+                    <p class="text-secondary">Tired of Time limitations?</p>
+                    <a href="/subscription/?user={{ user.username }}"class="btn btn-orange">Buy Subscription</a>
+                {% endif %}
 
             </div>
         </div>
@@ -154,7 +117,10 @@
 <!-- Pass room ID to JS safely -->
 <script>
     window.roomConfig = {
-        roomId: "{{ room_id|escapejs }}"
+        roomId: "{{ room_id|escapejs }}",
+        username: "{{ user.username|escapejs }}",
+        endUrl: "{% url 'end_meeting' room_id %}",
+        csrfToken: "{{ csrf_token }}"
     };
 
     // Copy room ID to clipboard
@@ -173,6 +139,20 @@
     let isPremiumRoom =
     "{{ is_premium_room|lower }}"
     === "true";
+
+function markMeetingEnded() {
+    const formData = new FormData();
+    formData.append("user", window.roomConfig.username);
+
+    return fetch(window.roomConfig.endUrl, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": window.roomConfig.csrfToken
+        },
+        body: formData,
+        keepalive: true
+    }).catch(() => null);
+}
 
 const timerText =
     document.getElementById("timer-text");
@@ -209,7 +189,9 @@ if (!isPremiumRoom) {
                 "Meeting time ended."
             );
 
-            window.location.href = "/dashboard/?user={{ user.username|escapejs }}";
+            markMeetingEnded().finally(() => {
+                window.location.href = "/dashboard/?user={{ user.username|escapejs }}";
+            });
 
             return;
         }
@@ -255,7 +237,9 @@ if (!isPremiumRoom) {
         this.setStatus("Call ended");
 
         {% if user %}
-            setTimeout(() => { window.location.href = "/dashboard/?user={{ user.username|escapejs }}"; }, 500);
+            markMeetingEnded().finally(() => {
+                setTimeout(() => { window.location.href = "/dashboard/?user={{ user.username|escapejs }}"; }, 500);
+            });
         {% else %}
             setTimeout(() => { window.location.href = "/"; }, 500);
         {% endif %}
