@@ -15,6 +15,5 @@ urlpatterns = [
     path('meetings/', views.meeting_history, name='meeting_history'),
     path('subscription/', views.subscription_page, name='subscription'),
     path('buy-plan/<int:plan_id>/', views.buy_plan, name='buy_plan'),
-    path('approve-payment/<int:proof_id>/',views.approve_payment,name='approve_payment'
-),
+    path('approve-payment/<int:proof_id>/',views.approve_payment,name='approve_payment'),
 ]
