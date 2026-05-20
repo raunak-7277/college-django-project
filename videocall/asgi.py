@@ -1,4 +1,4 @@
-"""
+﻿"""
 ASGI config for videocall project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
@@ -8,12 +8,15 @@ https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
 """
 
 import os
-from channels.routing import ProtocolTypeRouter, URLRouter
+import os
+
+# MUST set env var BEFORE any Django/channels imports
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'videocall.settings')
+
 from django.core.asgi import get_asgi_application
+from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 import call.routing
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'videocall.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Meeting Room - {{ room_id }}{% endblock %}
@@ -21,10 +21,10 @@
                             title="Click to copy Room ID"
                             onclick="copyRoomId()"
                         >
-                            🔑 {{ room_id }} &nbsp;<small class="room-hint">(click to copy)</small>
+                            ðŸ”‘ {{ room_id }} &nbsp;<small class="room-hint">(click to copy)</small>
                         </div>
                     </div>
-                    <span class="badge text-bg-dark border px-3 py-2">🔴 Live</span>
+                    <span class="badge text-bg-dark border px-3 py-2">ðŸ”´ Live</span>
                 </div>
 
                 <div class="timer-toast position-fixed top-0 end-0 p-3">
@@ -47,8 +47,8 @@
                     <div class="col-md-6">
                         <div class="video-panel">
                             <p class="small text-secondary mb-2">
-                                👤 You
-                                {% if user %} — <strong>{{ user.name }}</strong>{% endif %}
+                                ðŸ‘¤ You
+                                {% if user %} â€” <strong>{{ user.name }}</strong>{% endif %}
                             </p>
                             <video id="localVideo" autoplay muted playsinline></video>
                         </div>
@@ -57,7 +57,7 @@
                     <!-- Remote Video -->
                     <div class="col-md-6">
                         <div class="video-panel">
-                            <p class="small text-secondary mb-2">👤 Remote</p>
+                            <p class="small text-secondary mb-2">ðŸ‘¤ Remote</p>
                             <video id="remoteVideo" autoplay playsinline></video>
                         </div>
                     </div>
@@ -77,10 +77,10 @@
                 <h6 class="fw-bold mb-3">Participants</h6>
                 <ul class="list-unstyled text-secondary small">
                     <li class="mb-1">
-                        ✅ You
+                        âœ… You
                         {% if user %} ({{ user.name }}){% endif %}
                     </li>
-                    <li>⏳ Waiting for others...</li>
+                    <li>â³ Waiting for others...</li>
                 </ul>
 
                 <hr class="room-separator">

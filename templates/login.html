@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Login{% endblock %}
@@ -7,20 +7,20 @@
 <div class="auth-page d-flex justify-content-center align-items-center">
     <div class="auth-card">
 
-        <h3 class="fw-bold mb-1">Welcome Back 👋</h3>
+        <h3 class="fw-bold mb-1">Welcome Back ðŸ‘‹</h3>
         <p class="text-secondary mb-4">Login to start your video call</p>
 
         <!-- Error Message -->
         {% if error %}
         <div class="alert alert-danger py-2" role="alert">
-            ⚠️ {{ error }}
+            âš ï¸ {{ error }}
         </div>
         {% endif %}
 
         <!-- Success redirect hint -->
         {% if next %}
         <div class="alert alert-warning py-2" role="alert">
-            🔒 Please login first to access that page.
+            ðŸ”’ Please login first to access that page.
         </div>
         {% endif %}
 
@@ -70,7 +70,7 @@
             </div>
 
             <button type="submit" class="btn btn-orange w-100">
-                Sign In →
+                Sign In â†’
             </button>
         </form>
         <p class="text-center text-secondary mt-3 mb-0 small">

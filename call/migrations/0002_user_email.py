@@ -1,4 +1,4 @@
-# Generated manually for role-based staff user reporting.
+﻿# Generated manually for role-based staff user reporting.
 
 from django.db import migrations, models
 

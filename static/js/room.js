@@ -1,4 +1,4 @@
-class RoomMediaController {
+﻿class RoomMediaController {
     constructor(options) {
         this.localVideo = options.localVideo;
         this.remoteVideo = options.remoteVideo;
