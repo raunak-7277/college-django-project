@@ -2,9 +2,10 @@ import uuid
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-
-from .models import Meeting, Staff, User
-
+from .models import Meeting, Staff, User, PaymentProof
+import qrcode
+import base64
+from io import BytesIO
 
 # Gets the current normal user from the URL or form data.
 def get_user(request):
@@ -162,31 +163,46 @@ def register_view(request):
 # Logs out staff/admin sessions and returns to home.
 def logout_view(request):
     request.session.pop('staff_id', None)
+    request.session.flush()
     auth_logout(request)
     return redirect('home')
 
 
 # Shows staff dashboard with user and membership details.
 def staff_dashboard(request):
+
     staff_id = request.session.get('staff_id')
-    staff = Staff.objects.filter(id=staff_id, is_active=True).first()
+
+    staff = Staff.objects.filter(
+        id=staff_id,
+        is_active=True
+    ).first()
 
     if not staff:
         return redirect('login')
 
-    app_users = User.objects.all().order_by('name', 'username')
+    app_users = User.objects.all().order_by(
+        'name',
+        'username'
+    )
+
+    proofs = PaymentProof.objects.all()
+
     total_users = app_users.count()
-    paid_users = app_users.filter(is_paid=True).count()
+
+    paid_users = app_users.filter(
+        is_paid=True
+    ).count()
 
     return render(request, 'staff_dashboard.html', {
         'user': None,
         'staff_user': staff,
         'app_users': app_users,
+        'proofs': proofs,
         'total_users': total_users,
         'paid_users': paid_users,
         'free_users': total_users - paid_users,
     })
-
 
 # Shows the normal user dashboard after login.
 def dashboard(request):
@@ -226,6 +242,7 @@ def end_meeting(request, room_id):
 
 # Shows the subscription page for unpaid users.
 def subscription_page(request):
+
     user = get_user(request)
 
     if not user:
@@ -234,4 +251,84 @@ def subscription_page(request):
     if user.is_paid:
         return redirect(f'/dashboard/?user={user.username}')
 
-    return render(request, 'subscription.html', {'user': user})
+    return render(request, 'subscription.html', {
+        'user': user,
+    })
+
+
+def buy_plan(request, plan_id):
+
+    user = get_user(request)
+
+    if not user:
+        return redirect('login')
+
+    amount = request.GET.get('amount')
+    duration = request.GET.get('duration')
+
+    # SAVE UTR
+    if request.method == 'POST':
+
+        utr_number = request.POST.get(
+            'utr_number'
+        )
+
+        PaymentProof.objects.create(
+            user=user,
+            amount=amount,
+            duration=duration,
+            utr_number=utr_number,
+        )
+
+        return redirect(
+            f'/dashboard/?user={user.username}'
+        )
+
+    # YOUR UPI ID
+    upi_id = "6200471308@ybl"
+
+    # CREATE PAYMENT LINK
+    upi_link = (
+        f"upi://pay?"
+        f"pa={upi_id}&"
+        f"pn=VideoCall Premium&"
+        f"am={amount}&"
+        f"cu=INR"
+    )
+
+    qr = qrcode.make(upi_link)
+
+    buffer = BytesIO()
+
+    qr.save(buffer, format='PNG')
+
+    qr_code = base64.b64encode(
+        buffer.getvalue()
+    ).decode()
+
+    return render(request, 'payment.html', {
+        'user': user,
+        'qr_code': qr_code,
+        'amount': amount,
+        'duration': duration,
+        'upi_id': upi_id,
+    })
+
+
+def approve_payment(request, proof_id):
+
+    proof = PaymentProof.objects.get(
+        id=proof_id
+    )
+
+    user = proof.user
+
+    # ACTIVATE PREMIUM
+    user.is_paid = True
+
+    user.save()
+
+    # DELETE PAYMENT ENTRY
+    proof.delete()
+
+    return redirect('staff_dashboard')

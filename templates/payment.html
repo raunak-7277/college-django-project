@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Payment
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-5 col-md-7">
+
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <div class="card-body p-5 text-center">
+
+                    <h1 class="fw-bold mb-2 text-dark">
+
+                        Complete Payment
+
+                    </h1>
+
+                    <p class="text-dark mb-4">
+
+                        Scan the QR code using any UPI app
+
+                    </p>
+
+
+                    <!-- PRICE -->
+
+                    <h2 class="fw-bold text-success mb-1">
+
+                        ₹{{ amount }}
+
+                    </h2>
+
+                    <p class="text-dark mb-4">
+
+                        {{ duration }} Premium Plan
+
+                    </p>
+
+
+                    <!-- QR -->
+
+                    <div class="bg-white rounded-4 p-3 shadow-sm d-inline-block mb-4">
+
+                        <img
+                            src="data:image/png;base64,{{ qr_code }}"
+                            class="img-fluid"
+                            style="max-width:240px;"
+                        >
+
+                    </div>
+
+
+                    <!-- UPI -->
+
+                    <p class="mb-4 text-dark">
+
+                        UPI ID:
+                        <span class="fw-semibold text-primary">
+
+                            {{ upi_id }}
+
+                        </span>
+
+                    </p>
+
+
+                    <!-- UTR FORM -->
+
+                    <div class="mx-auto" style="max-width:320px;">
+
+                        <label class="form-label fw-semibold mb-3 text-dark">
+
+                            After Payment Submit UTR For Approval
+
+                        </label>
+
+                        <form method="POST">
+
+                            {% csrf_token %}
+
+                            <input
+                                type="text"
+                                name="utr_number"
+                                class="form-control text-center mb-3 bg-dark text-white border-secondary"
+                                placeholder="Enter UTR Number"
+                                required
+                            >
+
+                            <button
+                                type="submit"
+                                class="btn btn-success w-100 rounded-pill">
+
+                                Submit UTR
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}``

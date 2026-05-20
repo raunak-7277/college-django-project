@@ -1,41 +1,62 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Subscription{% endblock %}
+{% block title %}
+Subscription Plans
+{% endblock %}
 
 {% block content %}
 
 <div class="container py-5">
 
     <div class="text-center mb-5">
-        <h1 class="fw-bold">
-            Upgrade Your Plan
+
+        <h1 class="fw-bold display-5">
+            Upgrade To Premium
         </h1>
 
         <p class="text-muted">
-            Unlock premium meetings and features
+            Unlock unlimited video calling features
         </p>
+
     </div>
 
-    <div class="row g-4">
 
-        {% for plan in plans %}
+    <div class="row justify-content-center g-4">
 
-        <div class="col-md-4">
+        <!-- 1 MONTH PLAN -->
 
-            <div class="card shadow-lg border-0 h-100">
+        <div class="col-lg-4 col-md-6">
 
-                <div class="card-body text-center p-4">
+            <div class="card h-100 shadow-lg border-0 rounded-4 subscription-card">
 
-                    <h3 class="fw-bold">
-                        {{ plan.name }}
-                    </h3>
+                <div class="card-body text-center p-5">
 
-                    <h1 class="my-4">
-                        ₹{{ plan.price }}
+                    <h2 class="fw-bold mb-3">
+                        Starter
+                    </h2>
+
+                    <h1 class="display-4 fw-bold text-primary">
+                        ₹99
                     </h1>
 
-                    <a href="/buy-plan/{{ plan.id }}/?user={{ user.username }}"
-                       class="btn btn-dark w-100">
+                    <p class="text-muted mb-4">
+                        1 Month Access
+                    </p>
+
+                    <ul class="list-unstyled mb-4">
+
+                        <li class="mb-2">
+                            HD Video Calls
+                        </li>
+
+                        <li class="mb-2">
+                            Unlimited Meeting Time
+                        </li>
+                    </ul>
+
+                    <a href="/buy-plan/1/?amount=99&duration=1 Month&user={{ user.username }}"
+                       class="btn btn-primary w-100 rounded-pill py-2">
 
                         Buy Now
 
@@ -47,7 +68,100 @@
 
         </div>
 
-        {% endfor %}
+
+        <!-- 6 MONTH PLAN -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card h-100 shadow-lg border-0 rounded-4 subscription-card">
+
+                <div class="card-body text-center p-5">
+
+                    <h2 class="fw-bold mb-3">
+                        Pro
+                    </h2>
+
+                    <h1 class="display-4 fw-bold text-success">
+                        ₹399
+                    </h1>
+
+                    <p class="text-muted mb-4">
+                        6 Months Access
+                    </p>
+
+                    <ul class="list-unstyled mb-4">
+
+                        <li class="mb-2">
+                            HD Video Calls
+                        </li>
+
+                        <li class="mb-2">
+                            Unlimited Meeting Time
+                        </li>
+
+                    </ul>
+
+                    <a href="/buy-plan/2/?amount=399&duration=6 Months&user={{ user.username }}"
+                       class="btn btn-success w-100 rounded-pill py-2">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- 12 MONTH PLAN -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card h-100 shadow-lg border-0 rounded-4 subscription-card premium-border">
+
+                <div class="card-body text-center p-5">
+
+                    <span class="badge bg-warning text-dark mb-3 px-3 py-2">
+                        MOST POPULAR
+                    </span>
+
+                    <h2 class="fw-bold mb-3">
+                        Premium
+                    </h2>
+
+                    <h1 class="display-4 fw-bold text-warning">
+                        ₹699
+                    </h1>
+
+                    <p class="text-muted mb-4">
+                        12 Months Access
+                    </p>
+
+                    <ul class="list-unstyled mb-4">
+
+                        <li class="mb-2">
+                            HD Video Calls
+                        </li>
+
+                        <li class="mb-2">
+                            Unlimited Meeting Time
+                        </li>
+                    </ul>
+
+                    <a href="/buy-plan/3/?amount=699&duration=12 Months&user={{ user.username }}"
+                       class="btn btn-warning w-100 rounded-pill py-2">
+
+                        Buy Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
