@@ -99,6 +99,7 @@ if _db_url:
             _db_url,
             conn_max_age=600,
             conn_health_checks=True,
+            ssl_require=True,
         )
     }
 else:
@@ -143,6 +144,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 WHITENOISE_AUTOREFRESH = DEBUG
 # WhiteNoise compressed caching for production
 STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
