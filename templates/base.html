@@ -17,7 +17,7 @@
 
     {% block navbar %}
     <!-- ===== NAVBAR ===== -->
-    <nav class="navbar navbar-expand-lg sticky-top navbar-dark py-3 border-bottom border-secondary glass-nav">
+    <nav class="navbar navbar-expand-lg navbar-dark py-3 border-bottom border-secondary glass-nav sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'home' %}"> VideoCall</a>
 
@@ -25,7 +25,7 @@
 
                 {% if user and user.username %}
                     <!-- Logged-in state: show username + nav links -->
-                    <span class="text-secondary"><i class="fa-solid fa-circle-user"></i>{{ user.name }}</span>
+                    <span class="text-secondary"><i class="fa-solid fa-circle-user"></i> {{ user.name }}</span>
                     <a href="{% url 'meeting_history' %}?user={{ user.username }}" class="text-white text-decoration-none">History</a>
                     <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm px-3 rounded-pill">Logout</a>
                 {% else %}
