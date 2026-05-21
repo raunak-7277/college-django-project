@@ -8,6 +8,7 @@
 */
 
 .glass-nav {
+    margin-top: 0;
     backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, 0.6) !important;
 }
