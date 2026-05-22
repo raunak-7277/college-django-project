@@ -1,10 +1,19 @@
-﻿body {
+﻿*{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    overflow-x: hidden;
+}
+
+body {
     font-family: 'Inter', sans-serif;
     background: #0d0a07;
     color: white;
-    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
 }
 /* Used in:
    - templates/base.html
@@ -12,7 +21,9 @@
 
 .glass-nav {
     backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.6) !important;
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    z-index: 9999;
+    padding: 12px 0;
 }
 /* Used in:
    - templates/base.html
@@ -172,7 +183,7 @@
 
 .hero-section {
     min-height: 100vh;
-    padding: 80px 0;
+    padding-top: 90px;
     display: flex;
     align-items: center;
     background: radial-gradient(circle at left, rgba(255,140,0,0.15), transparent 80%), #0d0a07;
@@ -223,7 +234,7 @@
    - templates/home.html
 */
 
-.hero-avatar {
+.hero-avatar{
     width: 45px;
     height: 45px;
     object-fit: cover;
@@ -248,7 +259,9 @@
    - templates/room.html
 */
 
-.video-panel,
+.video-panel {
+    overflow: hidden;
+}
 /* Used in:
    - templates/room.html
 */
@@ -256,15 +269,13 @@
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px;
-}
-
-.video-panel {
-    padding: 1.2rem;
-}
-
-.sidebar-panel {
     height: 100%;
     padding: 1.5rem;
+}
+@media (max-width: 768px) {
+    video {
+        height: 250px;
+    }
 }
 /* Used in:
    - templates/room.html
@@ -300,15 +311,22 @@
    - templates/room.html
 */
 
-.timer-toast {
-    z-index: 1050;
+.timer-card{
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
 }
 
 video {
     width: 100%;
-    border-radius: 8px;
+    aspect-ratio: 16 / 9;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
     background: #111;
-    min-height: 200px;
+    display: block;
 }
 
 .history-card {
@@ -421,3 +439,4 @@ video {
         font-size: 3rem;
     }
 }
+
