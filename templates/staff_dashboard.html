@@ -27,12 +27,24 @@ Staff Dashboard
 
         </div>
 
-        <a href="{% url 'logout' %}"
-           class="btn btn-outline-light btn-sm px-3 rounded-pill">
+        <div class="d-flex gap-2 no-print">
 
-            Logout
+            <button type="button"
+                    class="btn btn-outline-warning btn-sm px-3 rounded-pill"
+                    onclick="window.print()">
 
-        </a>
+                Print PDF
+
+            </button>
+
+            <a href="{% url 'logout' %}"
+               class="btn btn-outline-light btn-sm px-3 rounded-pill">
+
+                Logout
+
+            </a>
+
+        </div>
 
     </div>
 
@@ -94,7 +106,7 @@ Staff Dashboard
 
     <!-- USER TABLE -->
 
-    <div class="table-panel mb-5">
+    <div class="table-panel mb-5 printable-user-data">
 
         <div class="table-responsive">
 
@@ -109,6 +121,8 @@ Staff Dashboard
                         <th>Username</th>
 
                         <th>Status</th>
+
+                        <th>Last Meeting Ended</th>
 
                     </tr>
 
@@ -150,13 +164,31 @@ Staff Dashboard
 
                         </td>
 
+                        <td style="color: white;">
+
+                            {% if app_user.last_meeting_ended_at %}
+
+                                {{ app_user.last_meeting_ended_at|date:"d M Y" }}
+
+                            {% elif app_user.last_meeting_started_at %}
+
+                                Not ended yet
+
+                            {% else %}
+
+                                No meeting
+
+                            {% endif %}
+
+                        </td>
+
                     </tr>
 
                     {% empty %}
 
                     <tr>
 
-                        <td colspan="3"
+                        <td colspan="4"
                             class="text-center text-secondary py-5">
 
                             No users found.
@@ -173,12 +205,60 @@ Staff Dashboard
 
         </div>
 
+        {% if page_obj.paginator.num_pages > 1 %}
+
+        <div class="d-flex justify-content-between align-items-center gap-3 px-3 pb-3 no-print">
+
+            <div class="text-secondary small">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </div>
+
+            <div class="d-flex gap-2">
+
+                {% if page_obj.has_previous %}
+
+                    <a href="?page={{ page_obj.previous_page_number }}"
+                       class="btn btn-outline-light btn-sm px-3 rounded-pill">
+                        Previous
+                    </a>
+
+                {% else %}
+
+                    <button class="btn btn-outline-secondary btn-sm px-3 rounded-pill"
+                            disabled>
+                        Previous
+                    </button>
+
+                {% endif %}
+
+                {% if page_obj.has_next %}
+
+                    <a href="?page={{ page_obj.next_page_number }}"
+                       class="btn btn-outline-light btn-sm px-3 rounded-pill">
+                        Next
+                    </a>
+
+                {% else %}
+
+                    <button class="btn btn-outline-secondary btn-sm px-3 rounded-pill"
+                            disabled>
+                        Next
+                    </button>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
     </div>
 
 
     <!-- PAYMENT REQUESTS -->
 
-    <div class="table-panel">
+    <div class="table-panel no-print">
 
         <div class="d-flex justify-content-between align-items-center mb-4">
 

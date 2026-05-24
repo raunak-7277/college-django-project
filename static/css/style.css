@@ -430,6 +430,45 @@ video {
     color: #ffd15c;
 }
 
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .metric-box,
+    .printable-user-data {
+        border: 1px solid #d0d0d0 !important;
+        box-shadow: none !important;
+    }
+
+    .table-panel {
+        background: white !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+    }
+
+    .staff-table,
+    .staff-table td,
+    .staff-table th {
+        color: black !important;
+    }
+
+    .staff-table td,
+    .staff-table th {
+        border-color: #d0d0d0 !important;
+    }
+}
+
 @media (max-width: 768px) {
     .history-grid {
         grid-template-columns: 1fr;

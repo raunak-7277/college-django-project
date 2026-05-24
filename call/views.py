@@ -1,5 +1,7 @@
 ﻿import uuid
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.core.paginator import Paginator
+from django.db.models import OuterRef, Subquery
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from .models import Meeting, Staff, User, PaymentProof
@@ -181,7 +183,21 @@ def staff_dashboard(request):
     if not staff:
         return redirect('login')
 
-    app_users = User.objects.all().order_by(
+    latest_meeting = Meeting.objects.filter(
+        creator=OuterRef('pk')
+    ).order_by(
+        '-created_at'
+    )
+
+    app_users = User.objects.annotate(
+        last_meeting_started_at=Subquery(
+            latest_meeting.values('created_at')[:1]
+        ),
+        last_meeting_ended_at=Subquery(
+            latest_meeting.values('ended_at')[:1]
+        ),
+    ).order_by(
+        '-last_meeting_started_at',
         'name',
         'username'
     )
@@ -194,10 +210,14 @@ def staff_dashboard(request):
         is_paid=True
     ).count()
 
+    paginator = Paginator(app_users, 10)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     return render(request, 'staff_dashboard.html', {
         'user': None,
         'staff_user': staff,
-        'app_users': app_users,
+        'app_users': page_obj,
+        'page_obj': page_obj,
         'proofs': proofs,
         'total_users': total_users,
         'paid_users': paid_users,
