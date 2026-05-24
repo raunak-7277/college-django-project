@@ -237,7 +237,7 @@ body {
 .hero-avatar{
     width: 45px;
     height: 45px;
-    object-fit: cover;
+    object-fit: cover; 
 }
 /* Used in:
    - templates/home.html
@@ -253,7 +253,7 @@ body {
 
 .room-wrapper {
     min-height: calc(100vh - 70px);
-    padding: 1.5rem;
+    padding: 100px 1.5rem 1.5rem;
 }
 /* Used in:
    - templates/room.html
@@ -440,3 +440,181 @@ video {
     }
 }
 
+/* Used in:
+   - templates/home.html
+*/
+
+    .site-footer {
+        background-color: #120e0c;
+        color: #9e948f; 
+        font-family: inherit;
+        border-top: 1px solid #2a221d !important;
+    }
+    
+    .footer-title {
+        color: #FFFFFF;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+    
+    .footer-title::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 40px;
+        height: 2px;
+        background-color: #FF9900; 
+    }
+
+    .brand-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    
+    .social-btn {
+        background-color: #231c18; 
+        color: #9e948f;
+        border: none;
+        width: 50px;
+        height: 50px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: 0.3s ease;
+    }
+    
+    .social-btn:hover {
+        background-color: #FF9900; 
+        color: #120e0c; 
+    }
+
+
+.site-footer{
+    background: #120e0c;
+    color: #9e948f;
+    border-top: 1px solid #2a221d;
+}
+
+.footer-title{
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-title::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: #ff9900;
+}
+
+.brand-text{
+    line-height: 1.7;
+    font-size: 0.92rem;
+}
+
+
+
+.contributor-card{
+    background: #1a1512;
+    border: 1px solid #2a221d;
+    border-radius: 14px;
+    padding: 22px 15px;
+    text-align: center;
+    transition: 0.3s ease;
+    height: 100%;
+    overflow: hidden;
+}
+
+.contributor-card:hover{
+    transform: translateY(-5px);
+    border-color: #ff9900;
+}
+
+
+.contributor-avatar{
+    width: 75px;
+    height: 75px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    display: block;
+
+    margin: 0 auto 15px auto;
+
+    border: 3px solid #2a221d;
+
+    overflow: hidden;
+}
+
+
+.contributor-name{
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.contributor-role{
+    color: #cbd5e1;
+    font-size: 0.8rem;
+    margin-bottom: 14px;
+    min-height: 35px;
+}
+
+
+.social-links{
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+.social-links a{
+    color: white;
+    font-size: 18px;
+    transition: 0.3s ease;
+}
+
+.social-links a:hover{
+    color: #ff9900;
+}
+
+
+
+.footer-bottom{
+    border-top: 1px solid #2a221d;
+    padding-top: 25px;
+    color: #9ca3af;
+}
+
+.contributor-card img{
+    width: 95px !important;
+    height: 95px !important;
+
+    min-width: 95px !important;
+    max-width: 95px !important;
+
+    border-radius: 50% !important;
+
+    object-fit: cover !important;
+
+    display: block !important;
+
+    margin: 0 auto 15px auto !important;
+}
